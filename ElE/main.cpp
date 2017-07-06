@@ -3,6 +3,8 @@
 
 int main(int argc, char* argv[])
 {
-	ElE::App();
+	MotorFlags flag;
+	flag.sdl = SDLEverything;
+	ElE::App(OpenGL,SDLAudio,PhysX,resizable,flag,500,500);
 	return 0;
 }
