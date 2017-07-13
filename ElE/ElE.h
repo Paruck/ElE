@@ -3,7 +3,8 @@
 #include <SFML\Main.hpp>
 #include <SFML\Window.hpp>
 #include <SFML\System.hpp>
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
+#include <SFML\OpenGL.hpp>
 #include <SDL\SDL_ttf.h>
 #include <SDL\SDL_mixer.h>
 #include <SDL\SDL_image.h>
@@ -73,6 +74,9 @@ typedef enum WindowFlags
 	skipTaskBar		= 0x00010000,
 	tooltip			= 0x00020000,
 	popUpMenu		= 0x00040000,
+	none			= 0x00080000,
+	titleBar		= 0x00100000,
+	closeButton		= 0x00200000,
 	autoFlagsW		= 0x00000000,
 }WindowFlags;
 
@@ -82,33 +86,58 @@ typedef union MotorFlags
 	SFMLFlags			sfml;
 }MotorFlags;
 
-typedef union ElEWindow 
+class ElEWindow 
 {
-	SDL_Window*			sdlWindow;
-	sf::Window*         sfmlWindow;
-	sf::RenderWindow*	sfml2DWindow;
+public:
+	union Window
+	{
+		SDL_Window*			sdlWindow;
+		sf::Window*         sfmlWindow;
+		sf::RenderWindow*	sfml2DWindow;
+	}window;
+	ElEWindow() = delete;
+	ElEWindow(const ElEGraphicsComponents& renderT);
+	~ElEWindow();
+};
 
-}ElEWindow;
-
-typedef union ElERender
+class ElERender
 {
-	SDL_Renderer*		sdlRender;
-	sf::RenderTexture	sfmlRender;
+public:
+	union Render
+	{
+		SDL_Renderer*		sdlRender;
+		sf::RenderTexture*	sfmlRender;
+	}render;
+	ElERender() = delete;
+	ElERender(const ElEGraphicsComponents& renderT);
+	~ElERender();
+};
 
-}ElERender;
-
-typedef union ElESurface
+class ElESurface
 {
-	SDL_Surface*		sdlSurface;
-	sf::Sprite*			sfmlSurface;
-}ElESurface;
+public:
+	union Surface 
+	{
+		SDL_Surface*		sdlSurface;
+		sf::Sprite*			sfmlSurface;
+	}surface;
+	ElESurface() = delete;
+	ElESurface(const ElEGraphicsComponents& renderT);
+	~ElESurface();
+};
 
-typedef union ElETexture
+class ElETexture
 {
-	SDL_Texture*		sdlTexture;
-	sf::Texture*        sfmlTexture;
-
-}ElETexture;
+public:
+	union Texture
+	{
+		SDL_Texture*		sdlTexture;
+		sf::Texture*        sfmlTexture;
+	}texture;
+	ElETexture() = delete;
+	ElETexture(const ElEGraphicsComponents& renderT);
+	~ElETexture();
+};
 
 class ElE
 {
@@ -116,23 +145,25 @@ private:
 	static ElEGraphicsComponents					graphicsComp;
 	static ElEAudioComponents						audioComp;
 	static ElEPhysicsComponents						physicsComp;
-	static WindowFlags								setFlags;
+	static int										setFlags;
 	static MotorFlags								motorFlags;
-	static ElEWindow								window;
-	static ElERender								render;
-	static ElESurface								surface;
-	static ElETexture								texture;
+	static ElEWindow*								window;
+	static ElERender*								render;
+	static ElESurface*								surface;
+	static ElETexture*								texture;
 	static std::vector<std::function<void()>>		initFunctions;
 	static int										screenWidth,
 													screenHeight;
+	static char*									windowTitle;
 public:
 	static void App(const _IN_ ElEGraphicsComponents&			graph,
 					const _IN_ ElEAudioComponents&				audio,
 					const _IN_ ElEPhysicsComponents&			phys,
-					const _IN_ WindowFlags&						flags,
+					const _IN_ int&								flags,
 					const _IN_ MotorFlags&						mFlags,
 					const _IN_ int&								width,
-					const _IN_ int&								height);
+					const _IN_ int&								height,
+					_IN_ char*							title);
 private:
 	static void PrepareJumpTables();
 	static void InitSFML();
