@@ -153,11 +153,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ElE.cpp" />
+    <ClCompile Include="ElEShader.cpp" />
+    <ClCompile Include="ElEThread.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ElE.h" />
     <ClInclude Include="ElEDefines.h" />
+    <ClInclude Include="ElEShader.h" />
+    <ClInclude Include="ElEThread.h" />
+    <ClInclude Include="ElEVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

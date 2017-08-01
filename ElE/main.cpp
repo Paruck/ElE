@@ -1,7 +1,8 @@
 #include <SDL\SDL.h>
 #include "ElE.h"
+#include "ElEDefines.h"
 
-int main(int argc, char* argv[])
+ElEint main(ElEint argc, char* argv[])
 {
 	MotorFlags flag;
 	flag.sdl = SDLEverything;

@@ -1,4 +1,5 @@
 #pragma once
+#ifndef RASPBERRY_COMPILE
 #include <SDL\SDL.h>
 #include <SFML\Main.hpp>
 #include <SFML\Window.hpp>
@@ -8,85 +9,45 @@
 #include <SDL\SDL_ttf.h>
 #include <SDL\SDL_mixer.h>
 #include <SDL\SDL_image.h>
+
+#else
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
+#include "GLES2/gl2.h"
+#include "EGL/egl.h"
+#include "EGL/eglext.h"
+#include "bcm_host.h"
+
+#endif
+
 #include <functional>
+#include <string.h>
+#include <math.h>
 #include <thread>
 #include <mutex>
-#include <vector>
 #include <chrono>
 #include <iostream>
+#include "ElEVector.h"
 #include "ElEDefines.h"
+#include "ElEThread.h"
 
-typedef enum ElEPhysicsComponents 
-{
-	Box2D,
-	PhysX,
-}ElEPhysicsComponents;
+class ElEGLContext {
+	union Context {
+#ifdef RASPBERRY_COMPILE
+		EGLContext*				context;
+#endif
+	};
+	ElEGLContext() = delete;
+	ElEGLContext(const ElEGraphicsComponents& renderT);
+	~ElEGLContext();
+private:
+	ElEGraphicsComponents type;
+};
 
-typedef enum ElEGraphicsComponents 
-{
-	OpenGL,
-	SDLGraphics,
-	Vulkan,
-	CDM,
-}ElEGraphicsComponents;
-
-typedef enum ElEAudioComponents 
-{
-	SFML,
-	SDLAudio,
-}ElEAudioComponents;
-
-typedef enum SDLFlags 
-{
-	SDLTimer		=	0x00080000,
-	SDLVideo		=	0x00100000,
-	SDLJoystick		=	0x00200000,
-	SDLHaptic		=	0x00400000,
-	SDLGameCtrl		=	0x00800000,
-	SDLEvents		=	0x01000000,
-	SDLEverything	=	0x02000000,
-	autoFlagsSDL	=	0x00000000,
-}SDLFlags;
-
-typedef enum SFMLFlags 
-{
-	SFMLTimer		=	0x00000100,
-
-}SFMLFlags;
-
-typedef enum WindowFlags
-{
-	fullScreen		= 0x00000001,
-	resizable		= 0x00000002,
-	openGL			= 0x00000004,
-	shown			= 0x00000008,
-	hidden			= 0x00000010,
-	borderless		= 0x00000020,
-	minimized		= 0x00000080,
-	maximized		= 0x00000100,
-	inputGrabbed	= 0x00000200,
-	inputFocus		= 0x00000400,
-	mouseFocus		= 0x00000800,
-	SDLforeign		= 0x00001000,
-	highDPI			= 0x00002000,
-	mouseCapture	= 0x00004000,
-	alwaysOnTop		= 0x00008000,
-	skipTaskBar		= 0x00010000,
-	tooltip			= 0x00020000,
-	popUpMenu		= 0x00040000,
-	none			= 0x00080000,
-	titleBar		= 0x00100000,
-	closeButton		= 0x00200000,
-	autoFlagsW		= 0x00000000,
-}WindowFlags;
-
-typedef union MotorFlags
-{
-	SDLFlags			sdl;
-	SFMLFlags			sfml;
-}MotorFlags;
-
-class ElEWindow 
+class ElEWindow
 {
 public:
 	union Window
@@ -94,10 +55,16 @@ public:
 		SDL_Window*			sdlWindow;
 		sf::Window*         sfmlWindow;
 		sf::RenderWindow*	sfml2DWindow;
+#ifdef RASPBERRY_COMPILE
+		EGLNativeWindowType eglWindow;
+#endif // RASPBERRY_COMPILE
+
 	}window;
 	ElEWindow() = delete;
 	ElEWindow(const ElEGraphicsComponents& renderT);
 	~ElEWindow();
+private:
+	ElEGraphicsComponents type;
 };
 
 class ElERender
@@ -107,23 +74,33 @@ public:
 	{
 		SDL_Renderer*		sdlRender;
 		sf::RenderTexture*	sfmlRender;
+#ifdef RASPBERRY_COMPILE
+		EGLDisplay			eglRender;
+#endif
 	}render;
 	ElERender() = delete;
 	ElERender(const ElEGraphicsComponents& renderT);
 	~ElERender();
+private:
+	ElEGraphicsComponents type;
 };
 
 class ElESurface
 {
 public:
-	union Surface 
+	union Surface
 	{
 		SDL_Surface*		sdlSurface;
 		sf::Sprite*			sfmlSurface;
+#ifdef RASPBERRY_COMPILE
+		EGLSurface			eglSurface;
+#endif
 	}surface;
 	ElESurface() = delete;
 	ElESurface(const ElEGraphicsComponents& renderT);
 	~ElESurface();
+private:
+	ElEGraphicsComponents type;
 };
 
 class ElETexture
@@ -133,10 +110,15 @@ public:
 	{
 		SDL_Texture*		sdlTexture;
 		sf::Texture*        sfmlTexture;
+#ifdef RASPBERRY_COMPILE
+		GLuint				eglTexture;
+#endif
 	}texture;
 	ElETexture() = delete;
 	ElETexture(const ElEGraphicsComponents& renderT);
 	~ElETexture();
+private:
+	ElEGraphicsComponents type;
 };
 
 class ElE
@@ -145,32 +127,44 @@ private:
 	static ElEGraphicsComponents					graphicsComp;
 	static ElEAudioComponents						audioComp;
 	static ElEPhysicsComponents						physicsComp;
-	static int										setFlags;
+	static ElEint									setFlags,
+													screenWidth,
+													screenHeight;
 	static MotorFlags								motorFlags;
 	static ElEWindow*								window;
 	static ElERender*								render;
 	static ElESurface*								surface;
 	static ElETexture*								texture;
-	static std::vector<std::function<void()>>		initFunctions;
-	static int										screenWidth,
-													screenHeight;
-	static char*									windowTitle;
+	static ElEVector<std::function<void()>>			initFunctions;
+	static ElEchar*									windowTitle;
+	static ElEThreadPool*							threadPool;
+#ifdef RASPBERRY_COMPILE
+
+#endif
 public:
-	static void App(const _IN_ ElEGraphicsComponents&			graph,
+	static void __cdecl App(const _IN_ ElEGraphicsComponents&			graph,
 					const _IN_ ElEAudioComponents&				audio,
 					const _IN_ ElEPhysicsComponents&			phys,
-					const _IN_ int&								flags,
+					const _IN_ ElEint&							flags,
 					const _IN_ MotorFlags&						mFlags,
-					const _IN_ int&								width,
-					const _IN_ int&								height,
-					_IN_ char*							title);
+					const _IN_ ElEint&							width,
+					const _IN_ ElEint&							height,
+					_IN_ char*									title);
+#ifdef RASPBERRY_COMPILE
+	static void __cdecl PutPixel();
+
+#endif
 private:
-	static void PrepareJumpTables();
-	static void InitSFML();
-	static void InitSDL();
-	static void InitVulkan();
-	static void InitCDM();
-	static void Init();
+	static void __cdecl PrepareJumpTables();
+	static void __cdecl InitSFML();
+	static void __cdecl InitSDL();
+	static void __cdecl InitVulkan();
+	static void __cdecl InitCDM();
+	static void __cdecl InitOpenGLes20Rasp();
+	static void __cdecl Init();
+#ifdef RASPBERRY_COMPILE
+	static void __cdecl InitGLesPlane();
+#endif
 	ElE();
 	~ElE();
 };

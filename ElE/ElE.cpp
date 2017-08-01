@@ -3,25 +3,25 @@
 ElEGraphicsComponents					ElE::graphicsComp;
 ElEAudioComponents						ElE::audioComp;
 ElEPhysicsComponents					ElE::physicsComp;
-int										ElE::setFlags;
+ElEint									ElE::setFlags,
+										ElE::screenWidth,
+										ElE::screenHeight;
 MotorFlags								ElE::motorFlags;
 ElEWindow*								ElE::window;
 ElERender*								ElE::render;
 ElESurface*								ElE::surface;
 ElETexture*								ElE::texture;
-std::vector<std::function<void()>>		ElE::initFunctions;
-int										ElE::screenWidth,
-										ElE::screenHeight;
+ElEVector<std::function<void()>>		ElE::initFunctions;
 char*									ElE::windowTitle;
 
 void ElE::App(
 	const _IN_ ElEGraphicsComponents & graph,
 	const _IN_ ElEAudioComponents & audio,
 	const _IN_ ElEPhysicsComponents & phys,
-	const _IN_ int & flags,
+	const _IN_ ElEint & flags,
 	const _IN_ MotorFlags & mFlags,
-	const _IN_ int & width,
-	const _IN_ int & height,
+	const _IN_ ElEint & width,
+	const _IN_ ElEint & height,
 	_IN_ char* title)
 {
 	graphicsComp = graph;
@@ -44,16 +44,17 @@ void ElE::App(
 
 void ElE::PrepareJumpTables()
 {
-	initFunctions.push_back(ElE::InitSFML);
-	initFunctions.push_back(ElE::InitSDL);
-	initFunctions.push_back(ElE::InitVulkan);
-	initFunctions.push_back(ElE::InitCDM);
+	initFunctions.add(ElE::InitSFML);
+	initFunctions.add(ElE::InitSDL);
+	initFunctions.add(ElE::InitVulkan);
+	initFunctions.add(ElE::InitCDM);
+	initFunctions.add(ElE::InitOpenGLes20Rasp);
 }
 
 void ElE::InitSFML()
 {
 	window = new ElEWindow(graphicsComp);
-	int f = 0;
+	ElEint f = 0;
 	if (setFlags & none)
 		f |= sf::Style::None;
 	if (setFlags & titleBar)
@@ -103,7 +104,7 @@ void ElE::InitSDL()
 		printf("Mix_OpenAudio: %s\n", Mix_GetError());
 		exit(-5);
 	}
-	const int flags = MIX_INIT_FLAC |
+	const ElEint flags = MIX_INIT_FLAC |
 		MIX_INIT_MP3 |
 		MIX_INIT_OGG;
 	if ((Mix_Init(flags) & flags) != flags)
@@ -116,7 +117,7 @@ void ElE::InitSDL()
 		SDL_Log("TTF failed to initialize.");
 		exit(-7);
 	}
-	const int flagsI = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
+	const ElEint flagsI = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
 	if ((IMG_Init(flagsI) & flagsI) != flagsI)
 	{
 		SDL_Log("Failed to initialize Image Library: %s", IMG_GetError());
@@ -135,15 +136,111 @@ void ElE::InitCDM()
 
 }
 
+void ElE::InitOpenGLes20Rasp()
+{
+#ifdef RASPBERRY_COMPILE
+	bcm_host_init();
+
+	static EGL_DISPMANX_WINDOW_T 	nativeWindow;
+	DISPMANX_ELEMENT_HANDLE_T	dispman_element;
+	DISPMANX_DISPLAY_HANDLE_T	dispman_display;
+	DISPMANX_UPDATE_HANDLE_T	dispman_update;
+	VC_RECT_T dst_rect;
+	VC_RECT_T src_rect;
+	static const EGLint attribute_list[] =
+	{
+		EGL_RED_SIZE, 		8,
+		EGL_GREEN_SIZE, 	8,
+		EGL_BLUE_SIZE,		8,
+		EGL_ALPHA_SIZE,		8,
+		EGL_DEPTH_SIZE,		16,
+		EGL_SURFACE_TYPE,	EGL_WINDOW_BIT,
+		EGL_NONE
+	};
+
+	static const EGLint context_attributes[] =
+	{
+		EGL_CONTEXT_CLIENT_VERSION,	2,
+		EGL_NONE
+	};
+
+	EGLConfig config;
+	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	assert(display != EGL_NO_DISPLAY);
+
+	result = eglInitialize(display, NULL, NULL);
+	assert(result != EGL_FALSE);
+
+	result = eglChooseConfig(display, attribute_list, &config, 1, &num_config);
+	assert(result != EGL_FALSE);
+
+	result = eglBindAPI(EGL_OPENGL_ES_API);
+	assert(result != EGL_FALSE);
+
+	context = eglCreateContext(display, config,
+		EGL_NO_CONTEXT, context_attributes);
+	assert(context != EGL_NO_CONTEXT);
+
+	success = graphics_get_display_size(0, &screenWidth, &screenHeight);
+	assert(success >= 0);
+
+	dst_rect.x = 0;
+	dst_rect.y = 0;
+	dst_rect.width = screenWidth;
+	dst_rect.height = screenHeight;
+
+	src_rect.x = 0;
+	src_rect.y = 0;
+	src_rect.width = screenWidth << 16;
+	src_rect.height = screenHeight << 16;
+
+	dispman_display = vc_dispmanx_display_open(0);
+	dispman_update = vc_dispmanx_update_start(0);
+
+	dispman_element = vc_dispmanx_element_add(
+		dispman_update, dispman_display, 0,
+		&dst_rect, 0, &src_rect,
+		DISPMANX_PROTECTION_NONE, 0, 0,
+		(DISPMANX_TRANSFORM_T)0);
+
+	nativeWindow.element = dispman_element;
+	nativeWindow.width = screenWidth;
+	nativeWindow.height = screenHeight;
+	vc_dispmanx_update_submit_sync(dispman_update);
+
+	hWnd = &nativeWindow;
+	surface = eglCreateWindowSurface(display, config,
+		hWnd, NULL);
+	assert(surface != EGL_NO_SURFACE);
+
+	result = eglMakeCurrent(display, surface, surface, context);
+	assert(result != EGL_FALSE);
+
+	glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glViewport(0, 0, screenWidth, screenHeight);
+	eglSwapBuffers(display, surface);
+	glEnable(GL_TEXTURE_2D);
+	std::cout << "OpenGLes initialized" << std::endl;
+#endif
+}
+
 void ElE::Init()
 {
-	initFunctions[graphicsComp]();
+	(*initFunctions[graphicsComp])();
 }
+
+#ifdef RASPBERRY_COMPILE
+void ElE::InitGLesPlane()
+{
+
+}
+#endif
 
 ElE::ElE()
 {
 }
-
 
 ElE::~ElE()
 {
@@ -151,34 +248,77 @@ ElE::~ElE()
 
 ElEWindow::ElEWindow(const ElEGraphicsComponents & renderT)
 {
-	if (renderT == OpenGL)
+	type = renderT;
+	switch (renderT)
+	{
+	case OpenGL:
 		window.sfmlWindow = nullptr;
+		break;
+	case OpenGLes20Rasp:
+#ifdef RASPBERRY_COMPILE
+		window.eglWindow = nullptr;
+#endif 
+		break;
+	}
 }
 
 ElEWindow::~ElEWindow()
 {
+	switch (type)
+	{
+
+	}
 }
 
 ElESurface::ElESurface(const ElEGraphicsComponents & renderT)
 {
+	type = renderT;
 }
 
 ElESurface::~ElESurface()
 {
+	switch (type)
+	{
+
+	}
 }
 
 ElETexture::ElETexture(const ElEGraphicsComponents & renderT)
 {
+	type = renderT;
 }
 
 ElETexture::~ElETexture()
 {
+	switch (type)
+	{
+
+	}
 }
 
 ElERender::ElERender(const ElEGraphicsComponents & renderT)
 {
+	type = renderT;
 }
 
 ElERender::~ElERender()
 {
+	switch (type)
+	{
+
+	}
 }
+
+ElEGLContext::ElEGLContext(const ElEGraphicsComponents & renderT)
+{
+	type = renderT;
+}
+
+ElEGLContext::~ElEGLContext()
+{
+	switch (type)
+	{
+
+	}
+}
+
