@@ -14,17 +14,19 @@
 class ElEThread
 {
 private:
-	std::thread t;
-	ElEbool		active;
+	std::thread*	t;
+	ElEbool			active;
 	void __cdecl TesterFunc(_IN_ std::function<void()> func);
 public:
 	ElEThread();
 	~ElEThread();
+	ElEThread(const _IN_ ElEThread& cpy);
 	void __cdecl StartThread(_IN_ std::function<void()> func);
 	inline ElEbool __cdecl isActive() { return active; }
 	void __cdecl CloseThread();
 	void __cdecl DetachThread();
-	ElEbool __cdecl isJoinable() { return t.joinable() ? ElEtrue : ElEfalse; }
+	ElEbool __cdecl isJoinable() { return t->joinable() ? ElEtrue : ElEfalse; }
+	ElEThread operator =(const ElEThread& th);
 };
 
 class ElEThreadPool {

@@ -1,5 +1,7 @@
 #pragma once
 #include "ElEScene.h"
+#include "ElEDefines.h"
+#include "ElEShader.h"
 class ElEMainScene : public ElEScene
 {
 public:
@@ -9,5 +11,9 @@ public:
 	void __cdecl Update() final;
 	void __cdecl Draw() final;
 	void __cdecl SceneEnd() final;
+private:
+	ElEShader	*vertexS,
+				*fragmentS;
+	ElEuint		programID;
 };
 

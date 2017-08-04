@@ -15,23 +15,9 @@ void ElESceneManager::Draw()
 	using namespace std;
 	using namespace chrono;
 	while (1) {
-		if (cleanupRequested)
-		{
-			drawMutex.lock();
-			drawQueue.Clear();
-			drawMutex.unlock();
-			continue;
-		}
-		if (drawQueue.Empty())
-		{
-			this_thread::sleep_for(10ms);
-			cleanupRequested = ElEfalse;
-			continue;
-		}
-		drawMutex.lock();
-		function<void()> f = drawQueue.Pop();
-		drawMutex.unlock();
-		f();
+		if (scene && !sceneIsChanging)
+			scene->Draw();
+		this_thread::sleep_for(10ms);
 	}
 }
 
@@ -42,8 +28,7 @@ ElESceneManager::~ElESceneManager()
 
 void ElESceneManager::ChangeScene(_IN_ ElEScene * const & val)
 {
-	cleanupRequested = ElEtrue;
-	while (cleanupRequested);
+	sceneIsChanging = ElEtrue;
 	if (scene)
 		delete scene;
 	scene = val;
@@ -51,6 +36,7 @@ void ElESceneManager::ChangeScene(_IN_ ElEScene * const & val)
 	{
 		scene->Start();
 	}
+	sceneIsChanging = ElEfalse;
 } 
 
 void ElESceneManager::SceneMainLoop()
@@ -59,7 +45,5 @@ void ElESceneManager::SceneMainLoop()
 	using namespace chrono;
 	if(scene)
 		scene->Update();
-	if(scene)
-		//drawQueue.Add(std::bind(&ElEScene::Draw,&scene));
 	this_thread::sleep_for(16ms);
 }

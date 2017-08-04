@@ -13,7 +13,7 @@ ElERender*								ElE::render;
 ElESurface*								ElE::surface;
 ElETexture*								ElE::texture;
 ElEVector<std::function<void()>>		ElE::initFunctions;
-char*									ElE::windowTitle;
+ElEchar*								ElE::windowTitle;
 
 void ElE::App(
 	const _IN_ ElEGraphicsComponents & graph,

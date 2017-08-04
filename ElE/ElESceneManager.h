@@ -19,9 +19,8 @@ public:
 	void __cdecl SceneMainLoop();
 private:
 	static ElESceneManager*				instance;
-	ElEbool								cleanupRequested = ElEfalse;
+	ElEbool								sceneIsChanging = ElEfalse;
 	std::mutex							drawMutex;
-	ElEQueue<std::function<void()>>		drawQueue;
 	ElEScene*							scene = nullptr;
 	ElESceneManager();
 	void __cdecl Draw();

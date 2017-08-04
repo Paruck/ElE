@@ -11,6 +11,7 @@ ElEShader::~ElEShader()
 
 void ElEShader::LoadFragmentShader(const ElEchar * filename)
 {
+	shaderType = fragmentShader;
 #ifdef RASPBERRY_COMPILE
 	assert(!src);
 	FILE* f = fopen(filename, "rb");
@@ -30,6 +31,7 @@ void ElEShader::LoadFragmentShader(const ElEchar * filename)
 
 void ElEShader::LoadVertexShader(const ElEchar * filename)
 {
+	shaderType = vertexShader;
 #ifdef RASPBERRY_COMPILE
 	assert(!Src);
 	FILE* f = fopen(filename, "rb");

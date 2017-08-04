@@ -17,6 +17,7 @@ typedef unsigned __int32	ElEuint;
 typedef char				ElEchar;
 typedef unsigned char		ElEuchar;
 typedef ElEbool				FLAG;
+typedef float				ElEfloat;
 
 const ElEint threadAmmount = 4;
 
