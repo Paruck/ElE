@@ -1,8 +1,7 @@
 #include "ElEThread.h"
 
 
-
-void ElEThread::TesterFunc(_IN_ void * func())
+void ElEThread::TesterFunc(_IN_ std::function<void()> func)
 {
 	active = ElEtrue;
 	func();
@@ -19,7 +18,7 @@ ElEThread::~ElEThread()
 {
 }
 
-void ElEThread::StartThread(_IN_ void *func())
+void ElEThread::StartThread(_IN_ std::function<void()> func)
 {
 	t = std::thread(&ElEThread::TesterFunc,this,func);
 }
@@ -43,13 +42,14 @@ void ElEThread::DetachThread()
 	t.detach();
 }
 
+ElEThreadPool*	ElEThreadPool::instance;
 ElEThreadPool::ElEThreadPool(const _IN_ ElEuint & amountOfThreads)
 {
 	threadPool = new ElEVector<ElEThread>(amountOfThreads);
 	threadSize = amountOfThreads;
 }
 
-ElEThread * ElEThreadPool::RequestThread(_IN_ void *func())
+ElEThread * ElEThreadPool::RequestThread(_IN_ std::function<void()> func)
 {
 	ElEThread* ret = nullptr;
 	int i = 0;

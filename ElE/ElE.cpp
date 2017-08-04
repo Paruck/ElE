@@ -1,4 +1,5 @@
 #include "ElE.h"
+#include "ElEMainScene.h"
 
 ElEGraphicsComponents					ElE::graphicsComp;
 ElEAudioComponents						ElE::audioComp;
@@ -22,7 +23,7 @@ void ElE::App(
 	const _IN_ MotorFlags & mFlags,
 	const _IN_ ElEint & width,
 	const _IN_ ElEint & height,
-	_IN_ char* title)
+	_IN_ ElEchar* title)
 {
 	graphicsComp = graph;
 	audioComp = audio;
@@ -34,11 +35,11 @@ void ElE::App(
 	windowTitle = title;
 	PrepareJumpTables();
 	Init();
-	printf("Presiona enter para continuar\n");
+	ElEThreadPool::getInstance(threadAmmount);
+	ElESceneManager::getInstance()->ChangeScene(new ElEMainScene());
 	while (1)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-			break;
+		ElESceneManager::getInstance()->SceneMainLoop();
 	}
 }
 

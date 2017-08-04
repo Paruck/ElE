@@ -23,7 +23,7 @@
     <ProjectGuid>{63DC9D31-F076-4E8A-8621-D930464EF549}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ElE</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -153,6 +153,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ElE.cpp" />
+    <ClCompile Include="ElEMainScene.cpp" />
+    <ClCompile Include="ElEScene.cpp" />
+    <ClCompile Include="ElESceneManager.cpp" />
     <ClCompile Include="ElEShader.cpp" />
     <ClCompile Include="ElEThread.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,6 +163,11 @@
   <ItemGroup>
     <ClInclude Include="ElE.h" />
     <ClInclude Include="ElEDefines.h" />
+    <ClInclude Include="ElEMainScene.h" />
+    <ClInclude Include="ElENode.h" />
+    <ClInclude Include="ElEQueue.h" />
+    <ClInclude Include="ElEScene.h" />
+    <ClInclude Include="ElESceneManager.h" />
     <ClInclude Include="ElEShader.h" />
     <ClInclude Include="ElEThread.h" />
     <ClInclude Include="ElEVector.h" />

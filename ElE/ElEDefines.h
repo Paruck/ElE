@@ -4,6 +4,7 @@
 #define _IN_OUT_
 #define WIN32_COMPILE
 //#define RASPBERRY_COMPILE
+
 typedef enum ElEBoolean
 {
 	ElEfalse = 0,
@@ -16,6 +17,8 @@ typedef unsigned __int32	ElEuint;
 typedef char				ElEchar;
 typedef unsigned char		ElEuchar;
 typedef ElEbool				FLAG;
+
+const ElEint threadAmmount = 4;
 
 typedef struct ElERect {
 	ElEint x, y;

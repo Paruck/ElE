@@ -33,6 +33,7 @@
 #include "ElEVector.h"
 #include "ElEDefines.h"
 #include "ElEThread.h"
+#include "ElESceneManager.h"
 
 class ElEGLContext {
 	union Context {
@@ -149,7 +150,7 @@ public:
 					const _IN_ MotorFlags&						mFlags,
 					const _IN_ ElEint&							width,
 					const _IN_ ElEint&							height,
-					_IN_ char*									title);
+					_IN_ ElEchar*								title);
 #ifdef RASPBERRY_COMPILE
 	static void __cdecl PutPixel();
 
