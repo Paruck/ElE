@@ -6,6 +6,6 @@ ElEint main(ElEint argc, char* argv[])
 {
 	MotorFlags flag;
 	flag.sdl = SDLEverything;
-	ElE::App(OpenGL,SDLAudio,PhysX,resizable | openGL,flag,500,500,"FUCK YOU");
+	ElE::App(SDLGraphics,SDLAudio,PhysX,resizable,flag,1024,1024,"FUCK YOU");
 	return 0;
 }

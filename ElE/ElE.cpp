@@ -14,6 +14,7 @@ ElESurface*								ElE::surface;
 ElETexture*								ElE::texture;
 ElEVector<std::function<void()>>		ElE::initFunctions;
 ElEchar*								ElE::windowTitle;
+SDL_Event								ElE::event;
 
 void ElE::App(
 	const _IN_ ElEGraphicsComponents & graph,
@@ -39,7 +40,11 @@ void ElE::App(
 	ElESceneManager::getInstance()->ChangeScene(new ElEMainScene());
 	while (1)
 	{
+		PollEvents();
+		if (event.type == SDL_QUIT) exit(0);
+		SDL_RenderClear(render->render.sdlRender);
 		ElESceneManager::getInstance()->SceneMainLoop();
+		SDL_RenderPresent(render->render.sdlRender);
 	}
 }
 
@@ -125,6 +130,7 @@ void ElE::InitSDL()
 		exit(-8);
 	}
 	Mix_VolumeMusic(100);
+	SDL_SetRenderDrawColor(render->render.sdlRender, 0, 0, 0, 255);
 }
 
 void ElE::InitVulkan()
@@ -229,7 +235,24 @@ void ElE::InitOpenGLes20Rasp()
 
 void ElE::Init()
 {
-	(*initFunctions[graphicsComp])();
+	render = new ElERender(graphicsComp);
+	surface = new ElESurface(graphicsComp);
+	window = new ElEWindow(graphicsComp);
+	texture = new ElETexture(graphicsComp);
+	(*initFunctions.at(graphicsComp))();
+}
+
+void ElE::PollEvents()
+{
+	//cambiar por tabla de salto
+#ifndef RASPBERRY_COMPILE
+	switch (graphicsComp)
+	{
+	case SDLGraphics:
+		SDL_PollEvent(&event);
+	break;
+	}
+#endif
 }
 
 #ifdef RASPBERRY_COMPILE
@@ -260,6 +283,9 @@ ElEWindow::ElEWindow(const ElEGraphicsComponents & renderT)
 		window.eglWindow = nullptr;
 #endif 
 		break;
+	case SDLGraphics:
+		window.sdlWindow = nullptr;
+		break;
 	}
 }
 
@@ -267,46 +293,72 @@ ElEWindow::~ElEWindow()
 {
 	switch (type)
 	{
-
+	case SDLGraphics:
+		SDL_DestroyWindow(window.sdlWindow);
+		break;
 	}
 }
 
 ElESurface::ElESurface(const ElEGraphicsComponents & renderT)
 {
 	type = renderT;
+	switch (renderT)
+	{
+	case SDLGraphics:
+		surface.sdlSurface = nullptr;
+		break;
+	}
 }
 
 ElESurface::~ElESurface()
 {
 	switch (type)
 	{
-
+	case SDLGraphics:
+		SDL_FreeSurface(surface.sdlSurface);
+		break;
 	}
 }
 
 ElETexture::ElETexture(const ElEGraphicsComponents & renderT)
 {
 	type = renderT;
+	switch (renderT)
+	{
+	case SDLGraphics:
+		texture.sdlTexture = nullptr;
+		break;
+	}
 }
 
 ElETexture::~ElETexture()
 {
 	switch (type)
 	{
-
+	case SDLGraphics:
+		SDL_DestroyTexture(texture.sdlTexture);
+		break;
 	}
 }
 
 ElERender::ElERender(const ElEGraphicsComponents & renderT)
 {
 	type = renderT;
+	switch (renderT)
+	{
+	case SDLGraphics:
+		render.sdlRender = nullptr;
+		break;
+	}
 }
 
 ElERender::~ElERender()
 {
 	switch (type)
 	{
-
+	case SDLGraphics:
+		SDL_DestroyRenderer(render.sdlRender);
+		break;
 	}
 }
 

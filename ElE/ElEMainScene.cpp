@@ -7,6 +7,7 @@ const ElEfloat ElEMainScene::tris[]{
 		-1.0f, 1.0f, 0.0f, 1.0f,
 		1.0f, 1.0f, 0.0f, 1.0f
 };
+
 ElEMainScene::ElEMainScene()
 {
 	vertexS = new ElEShader(OpenGLes20Rasp);
@@ -31,8 +32,6 @@ void ElEMainScene::Start()
 	glGetProgramInfoLog(Id, sizeof log, NULL, log);
 	printf("%d:program:\n%s\n", Id, log);
 
-
-
 	static const ElEfloat textureCoords[]
 	{
 		0.0f, 1.0f, 0.0f, 0.0f,
@@ -45,7 +44,7 @@ void ElEMainScene::Start()
 	glBindBuffer(GL_ARRAY_BUFFER, buffers);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tris), tris, GL_STATIC_DRAW);
 
-	pixData = new ElEuchar[ElE::getWidth() * ElEuint::getHeight() * 4];
+	pixData = new ElEuchar[ElE::getWidth() * ElE::getHeight() * 4];
 	for (int i = ElE::getWidth() * ElEuint::getHeight() * 4; i--;)
 		pixData[i] = 255;
 	glGenTextures(1, &textureID);
@@ -59,18 +58,33 @@ void ElEMainScene::Start()
 	glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#else
+	pixData = new ElEuchar[ElE::getWidth() * ElE::getHeight() * 4];
+	for (int i = ElE::getWidth() * ElE::getHeight() * 4; i--;)
+		pixData[i] = 0;
+	surface = new ElESurface(ElE::getGraphicsRenderer());
+	surface->surface.sdlSurface = SDL_CreateRGBSurface(0, ElE::getWidth(), ElE::getHeight(), 32, 0, 0, 0, 0);
+	//surface->surface.sdlSurface = SDL_CreateRGBSurfaceWithFormat(0, ElE::getWidth(), ElE::getHeight(), 32,
+		//SDL_PIXELFORMAT_RGBA32);
+
 #endif
 	
 }
 
 void ElEMainScene::Update()
 {
-#ifdef RASPBERRY_COMPILE
-
 	miniUpdate();
 	refreshText();
 	drawEverything();
+#ifdef RASPBERRY_COMPILE
+
 	eglSwapBuffers(ELE::getRender()->render.eglRender, ELE::getSurface()->surface.eglSurface);
+#else
+	SDL_Texture* renderTexture = SDL_CreateTextureFromSurface(ElE::getRender()->render.sdlRender,
+		surface->surface.sdlSurface);
+	SDL_RenderCopy(ElE::getRender()->render.sdlRender, renderTexture,
+		nullptr, nullptr);
+	SDL_DestroyTexture(renderTexture);
 #endif
 	
 }
@@ -91,6 +105,8 @@ void ElEMainScene::refreshText()
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ElE::getWidth(), ElEuint::getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pixData);
 	glBindTexture(GL_TEXTURE_2D, 0);
+#else
+	surface->surface.sdlSurface->pixels = pixData;
 #endif
 }
 
@@ -126,7 +142,19 @@ void ElEMainScene::drawEverything()
 
 void ElEMainScene::miniUpdate()
 {
-	//aqui va todo el codigo chido pa no confundirse
+#pragma region LineCircle
+	setR(rand()%255);
+	setG(rand() % 255);
+	setB(rand() % 255);
+	setA(0);
+	setCenterX(250);
+	setCenterY(250);
+	const ElEfloat PI = 3.1415;
+	const ElEfloat degtorad = PI / 180;
+	for (int i = 360; i--;)
+		putLine((100 * cos(degtorad*i)) + 250, (100 * sin(degtorad*i)) + 250);
+#pragma endregion EndLineCircle
+
 }
 
 void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar & r, const ElEuchar & g, const ElEuchar & b, const ElEuchar & a)
@@ -156,118 +184,52 @@ void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
 void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint & x1, const ElEuint & y1)
 {
 	//diseñar este pedo en putiza
-	ElEint	dX = x1 > x ? x1 - x : x - x1, // -x, -y && x, y
-			dY = y1 > y ? y1 - y : y - y1; // -x, -y && x, y
-	if (dY > dX) // y > x 
+	if (x1 > ElE::getWidth() || x1 < 0) { printf("wtf"); return; }
+	if (y1 > ElE::getHeight() || y1 < 0) { printf("wtf"); return; }
+	ElEint	dx = x1 - x,
+			dy = y1 - y,
+			d,
+			signx = dx > 0 ? 1 : -1,
+			signy = dy > 0 ? 1 : -1,
+			yt = y,
+			xt = x;
+	dx = abs(dx);
+	dy = abs(dy);
+
+	if (dy > dx) // y > x 
 	{
-		if (dX < 0) 
+		ElEint	E = 2 * dx,
+				NE = 2 * (dx - dy),
+				d = 2 * dx - dy;
+		while (yt != y1)
 		{
-			if ((0 - dX) > dY)
+			putPixel(xt, yt);
+			if (d > 0)
 			{
-				ElEint	E = 2 * dY,
-						NE = 2 * (dY - dX),
-						d = 2 * dY - dX,
-						xt = x + 1,
-						yt = y;
-				putPixel(x, y);
-				while (xt <= y1)
-				{
-					if (d > 0)
-					{
-						--yt;
-						d += NE;
-					}
-					else
-						d += E;
-					putPixel(xt, yt);
-					++xt;
-				}
-				return;
+				d += NE;
+				xt += signx;
 			}
-			ElEint	E = 2 * dX,
-					NE = 2 * (dX - dY),
-					d = 2 * dX - dY,
-					xt = y + 1,
-					yt = x;
-			putPixel(x, y);
-			while (xt <= y1)
-			{
-				if (d > 0)
-				{
-					--yt;
-					d += NE;
-				}
-				else
-					d += E;
-				putPixel(xt, yt);
-				++xt;
-			}
+			else
+				d += E;
+			yt += signy;
 		}
-		else
-		{
-			ElEint	E = 2 * dX,
-					NE = 2 * (dX - dY),
-					d = 2 * dX - dY,
-					xt = y + 1,
-					yt = x;
-			putPixel(x, y);
-			while (xt <= y1)
-			{
-				if (d > 0)
-				{
-					++yt;
-					d += NE;
-				}
-				else
-					d += E;
-				putPixel(xt, yt);
-				++xt;
-			}
-		}
-	} 
-	else //x > y
+	}
+	else //x > y 
 	{
-		if (dY < 0)
+		ElEint	E = 2 * dy,
+				NE = 2 * (dy - dx),
+				d = 2 * dy - dx;
+		while (xt != x1)
 		{
-			ElEint	E = 2 * dY,
-					NE = 2 * (dY - dX),
-					d = 2 * dY - dX,
-					xt = x + 1,
-					yt = y;
-			putPixel(x, y);
-			while (xt <= x1)
+			putPixel(xt, yt);
+			if (d > 0)
 			{
-				if (d > 0)
-				{
-					--yt;
-					d += NE;
-				}
-				else
-					d += E;
-				putPixel(xt, yt);
-				++xt;
+				yt += signy;
+				d += NE;
 			}
-		}
-		else
-		{
-			ElEint	E = 2 * dY,
-					NE = 2 * (dY - dX),
-					d = 2 * dY - dX,
-					xt = x + 1,
-					yt = y;
-			putPixel(x, y);
-			while (xt <= x1)
-			{
-				if (d > 0)
-				{
-					++yt;
-					d += NE;
-				}
-				else
-					d += E;
-				putPixel(xt, yt);
-				++xt;
-			}
+			else
+				d += E;
+			xt += signx;
 		}
 	}
 }
@@ -279,10 +241,12 @@ void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint
 
 void ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
 {
-	//este es lo mismo que la puta linea solo hay que usar los centros
+	putLine(cX, cY, x1, y1);
+	
 }
 
 void ElEMainScene::putCircle(const ElEuint & r)
 {
+	putCircle(cX, cY, r);
 	//esto es lo mismo que el pinche circulo solo hay que usar los centros
 }

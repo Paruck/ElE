@@ -2,6 +2,8 @@
 #include "ElEScene.h"
 #include "ElEDefines.h"
 #include "ElEShader.h"
+#include "include\SDL\SDL.h"
+#include "ElE.h"
 class ElEMainScene : public ElEScene
 {
 public:
@@ -26,6 +28,7 @@ private:
 				cX = 0,
 				cY = 0;
 	static const ElEfloat tris[];
+	ElESurface* surface;
 	void __cdecl refreshText();
 	void __cdecl drawEverything();
 	void __cdecl miniUpdate();

@@ -126,6 +126,10 @@ private:
 	ElEGraphicsComponents type;
 };
 
+class ElEEvent {
+
+};
+
 class ElE
 {
 private:
@@ -143,6 +147,7 @@ private:
 	static ElEVector<std::function<void()>>			initFunctions;
 	static ElEchar*									windowTitle;
 	static ElEThreadPool*							threadPool;
+	static SDL_Event								event;
 #ifdef RASPBERRY_COMPILE
 
 #endif
@@ -160,6 +165,8 @@ public:
 	static inline ElERender* __cdecl getRender() { return render; }
 	static inline ElESurface* __cdecl getSurface() { return surface; }
 	static inline ElETexture* __cdecl getTexture() { return texture; }
+	static inline ElEWindow* __cdecl getWindow() { return window; }
+	static inline ElEGraphicsComponents __cdecl getGraphicsRenderer() { return graphicsComp; }
 #ifdef RASPBERRY_COMPILE
 	static void __cdecl PutPixel();
 
@@ -172,6 +179,7 @@ private:
 	static void __cdecl InitCDM();
 	static void __cdecl InitOpenGLes20Rasp();
 	static void __cdecl Init();
+	static void __cdecl PollEvents();
 #ifdef RASPBERRY_COMPILE
 	static void __cdecl InitGLesPlane();
 #endif
