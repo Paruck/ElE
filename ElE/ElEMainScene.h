@@ -14,6 +14,7 @@ public:
 private:
 	ElEShader	*vertexS,
 				*fragmentS;
-	ElEuint		programID;
+	ElEuint		programID,
+				*buffers;
 };
 

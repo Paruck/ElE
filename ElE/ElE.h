@@ -53,12 +53,13 @@ class ElEWindow
 public:
 	union Window
 	{
+#ifndef RASPBERRY_COMPILE
 		SDL_Window*			sdlWindow;
 		sf::Window*         sfmlWindow;
 		sf::RenderWindow*	sfml2DWindow;
-#ifdef RASPBERRY_COMPILE
+#else
 		EGLNativeWindowType eglWindow;
-#endif // RASPBERRY_COMPILE
+#endif // !RASPBERRY_COMPILE
 
 	}window;
 	ElEWindow() = delete;
@@ -73,11 +74,12 @@ class ElERender
 public:
 	union Render
 	{
+#ifndef RASPBERRY_COMPILE
 		SDL_Renderer*		sdlRender;
 		sf::RenderTexture*	sfmlRender;
-#ifdef RASPBERRY_COMPILE
+#else
 		EGLDisplay			eglRender;
-#endif
+#endif	//!RASPBERRY_COMPILE
 	}render;
 	ElERender() = delete;
 	ElERender(const ElEGraphicsComponents& renderT);
@@ -91,11 +93,12 @@ class ElESurface
 public:
 	union Surface
 	{
+#ifndef RASPBERRY_COMPILE
 		SDL_Surface*		sdlSurface;
 		sf::Sprite*			sfmlSurface;
-#ifdef RASPBERRY_COMPILE
+#else
 		EGLSurface			eglSurface;
-#endif
+#endif	//!RASPBERRY_COMPILE
 	}surface;
 	ElESurface() = delete;
 	ElESurface(const ElEGraphicsComponents& renderT);
@@ -109,11 +112,12 @@ class ElETexture
 public:
 	union Texture
 	{
+#ifndef RASPBERRY_COMPILE
 		SDL_Texture*		sdlTexture;
 		sf::Texture*        sfmlTexture;
-#ifdef RASPBERRY_COMPILE
+#else
 		GLuint				eglTexture;
-#endif
+#endif	//!RASPBERRY_COMPILE
 	}texture;
 	ElETexture() = delete;
 	ElETexture(const ElEGraphicsComponents& renderT);

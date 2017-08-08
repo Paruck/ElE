@@ -1,5 +1,5 @@
 #include "ElEMainScene.h"
-
+#include "ElE.h"
 
 
 ElEMainScene::ElEMainScene()
@@ -42,13 +42,29 @@ void ElEMainScene::Start()
 		1.0f, 0.0f, 0.0f, 0.0f
 	}
 		
+	glGenBuffers(1, &buffers);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tris), tris, GL_STATIC_DRAW);
 #endif
 
 }
 
 void ElEMainScene::Update()
 {
+#ifdef RASPBERRY_COMPILE
 
+
+
+
+
+
+
+
+
+
+	eglSwapBuffers(ELE::render->render.eglRender, ELE::surface->surface.eglSurface);
+#endif
+	
 }
 
 void ElEMainScene::Draw()
