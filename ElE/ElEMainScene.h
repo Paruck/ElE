@@ -44,5 +44,6 @@ private:
 	inline void __cdecl setA(const ElEuchar& _a) { a = _a; }
 	inline void __cdecl setCenterX(const ElEuint& x) { cX = x; }
 	inline void __cdecl setCenterY(const ElEuint& y) { cY = y; }
+	inline void __cdecl clearScreen();
 };
 

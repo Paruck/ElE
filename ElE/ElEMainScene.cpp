@@ -86,6 +86,7 @@ void ElEMainScene::Update()
 		nullptr, nullptr);
 	SDL_DestroyTexture(renderTexture);
 #endif
+	clearScreen();
 	
 }
 
@@ -143,16 +144,16 @@ void ElEMainScene::drawEverything()
 void ElEMainScene::miniUpdate()
 {
 #pragma region LineCircle
-	setR(rand()%255);
+	setR(rand() % 255);
 	setG(rand() % 255);
 	setB(rand() % 255);
 	setA(0);
-	setCenterX(250);
-	setCenterY(250);
+	setCenterX(rand() % ElE::getWidth());
+	setCenterY(rand() % ElE::getHeight());
 	const ElEfloat PI = 3.1415;
 	const ElEfloat degtorad = PI / 180;
 	for (int i = 360; i--;)
-		putLine((100 * cos(degtorad*i)) + 250, (100 * sin(degtorad*i)) + 250);
+		putLine((100 * cos(degtorad*i)) + cX, (100 * sin(degtorad*i)) + cY);
 #pragma endregion EndLineCircle
 
 }
@@ -184,8 +185,6 @@ void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
 void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint & x1, const ElEuint & y1)
 {
 	//diseñar este pedo en putiza
-	if (x1 > ElE::getWidth() || x1 < 0) { printf("wtf"); return; }
-	if (y1 > ElE::getHeight() || y1 < 0) { printf("wtf"); return; }
 	ElEint	dx = x1 - x,
 			dy = y1 - y,
 			d,
@@ -203,6 +202,8 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 				d = 2 * dx - dy;
 		while (yt != y1)
 		{
+			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
+			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
 			if (d > 0)
 			{
@@ -221,6 +222,8 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 				d = 2 * dy - dx;
 		while (xt != x1)
 		{
+			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
+			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
 			if (d > 0)
 			{
@@ -249,4 +252,10 @@ void ElEMainScene::putCircle(const ElEuint & r)
 {
 	putCircle(cX, cY, r);
 	//esto es lo mismo que el pinche circulo solo hay que usar los centros
+}
+
+inline void ElEMainScene::clearScreen()
+{
+	for (int i = ElE::getWidth() * ElE::getHeight() * 4; i--;)
+		pixData[i] = 0;
 }
