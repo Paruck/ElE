@@ -155,6 +155,11 @@ public:
 					const _IN_ ElEint&							width,
 					const _IN_ ElEint&							height,
 					_IN_ ElEchar*								title);
+	static inline ElEint __cdecl getWidth() { return screenWidth; }
+	static inline ElEint __cdecl getHeight() { return screenHeight; }
+	static inline ElERender* __cdecl getRender() { return render; }
+	static inline ElESurface* __cdecl getSurface() { return surface; }
+	static inline ElETexture* __cdecl getTexture() { return texture; }
 #ifdef RASPBERRY_COMPILE
 	static void __cdecl PutPixel();
 
