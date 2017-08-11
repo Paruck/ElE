@@ -45,6 +45,5 @@ private:
 	inline void __cdecl setCenterX(const ElEuint& x) { cX = x; }
 	inline void __cdecl setCenterY(const ElEuint& y) { cY = y; }
 	inline void __cdecl clearScreen();
-	ElEbool	testBool = ElEfalse;
 };
 

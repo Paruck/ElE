@@ -1,9 +1,6 @@
 #include "ElEMainScene.h"
 #include "ElE.h"
 
-const ElEfloat PI = 3.1415;
-const ElEfloat degtorad = PI / 180;
-
 const ElEfloat ElEMainScene::tris[]{
 	-1.0f, -1.0f, 0.0f, 1.0f,
 		1.0f, -1.0f, 0.0f, 1.0f,
@@ -146,25 +143,19 @@ void ElEMainScene::drawEverything()
 
 void ElEMainScene::miniUpdate()
 {
-	setR(rand()%255);
-	setG(rand()%255);
-	setB(rand()%255);
-	setA(0);
-	//setCenterX(rand() % ElE::getWidth());
-	//setCenterY(rand() % ElE::getHeight());
-	setCenterX(4012);
-	setCenterY(4012);
 #pragma region LineCircle
-
+	setR(rand() % 255);
+	setG(rand() % 255);
+	setB(rand() % 255);
+	setA(0);
+	setCenterX(rand() % ElE::getWidth());
+	setCenterY(rand() % ElE::getHeight());
+	const ElEfloat PI = 3.1415;
+	const ElEfloat degtorad = PI / 180;
 	for (int i = 360; i--;)
-		putLine((512 * cos(degtorad*i)) + cX, (512 * sin(degtorad*i)) + cY);
+		putLine((100 * cos(degtorad*i)) + cX, (100 * sin(degtorad*i)) + cY);
 #pragma endregion EndLineCircle
-#pragma region Circle
-	setCenterX(4012 << 1);
-	setCenterY(4012 << 1);
-	putCircle(50);
-#pragma endregion EndCircle
-	testBool = ElEtrue;
+
 }
 
 void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar & r, const ElEuchar & g, const ElEuchar & b, const ElEuchar & a)
@@ -181,7 +172,14 @@ void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar
 
 void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
 {
-	putPixel(x, y, r, g, b, a);
+	int offset = (x + (y * ElE::getWidth())) * 4;
+	if (offset < 0 || offset > ElE::getWidth() * ElE::getHeight() * 4)
+		return;
+
+	pixData[offset] = r;
+	pixData[offset + 1] = g;
+	pixData[offset + 2] = b;
+	pixData[offset + 3] = a;
 }
 
 void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint & x1, const ElEuint & y1)
@@ -189,6 +187,7 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 	//diseñar este pedo en putiza
 	ElEint	dx = x1 - x,
 			dy = y1 - y,
+			d,
 			signx = dx > 0 ? 1 : -1,
 			signy = dy > 0 ? 1 : -1,
 			yt = y,
@@ -198,29 +197,41 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 
 	if (dy > dx) // y > x 
 	{
-		ElEint	E = dx << 1,
-				NE = (dx - dy) << 1,
-				d = (dx << 1) - dy;
+		ElEint	E = 2 * dx,
+				NE = 2 * (dx - dy),
+				d = 2 * dx - dy;
 		while (yt != y1)
 		{
-			if ((xt > ElE::getWidth() || xt < 0) ||
-				(yt > ElE::getHeight() || yt < 0)) { printf("wtf"); return; }
+			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
+			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
-			d > 0 ? d += NE, xt += signx : d += E;
+			if (d > 0)
+			{
+				d += NE;
+				xt += signx;
+			}
+			else
+				d += E;
 			yt += signy;
 		}
 	}
 	else //x > y 
 	{
-		ElEint	E = dy << 1,
-				NE = (dy - dx) << 1,
-				d = (dy << 1) - dx;
+		ElEint	E = 2 * dy,
+				NE = 2 * (dy - dx),
+				d = 2 * dy - dx;
 		while (xt != x1)
 		{
-			if ((xt > ElE::getWidth() || xt < 0) ||
-				(yt > ElE::getHeight() || yt < 0)) { printf("wtf"); return; }
+			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
+			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
-			d > 0 ? yt += signy, d += NE : d += E;
+			if (d > 0)
+			{
+				yt += signy;
+				d += NE;
+			}
+			else
+				d += E;
 			xt += signx;
 		}
 	}
@@ -228,24 +239,7 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 
 void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint & r)
 {
-	ElEint	x1 = r - 1,
-			y1 = 0,
-			dx = 1,
-			dy = 1,
-			d = dx - (r << 1);
-	while (x1 >= y1)
-	{
-		putPixel(x + x1, y + y1);
-		putPixel(x + y1, y + x1);
-		putPixel(x - y1, y + x1);
-		putPixel(x - x1, y + y1);
-		putPixel(x - x1, y - y1);
-		putPixel(x - y1, y - x1);
-		putPixel(x + y1, y - x1);
-		putPixel(x + x1, y - y1);
-		d <= 0 ? ++y1, d += dy, dy += 2 : --x1, dx += 2, d += ((0-r) << 1) + dx;
-	}
-
+	//este tambien
 }
 
 void ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
@@ -257,6 +251,7 @@ void ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
 void ElEMainScene::putCircle(const ElEuint & r)
 {
 	putCircle(cX, cY, r);
+	//esto es lo mismo que el pinche circulo solo hay que usar los centros
 }
 
 inline void ElEMainScene::clearScreen()
