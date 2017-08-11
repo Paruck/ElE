@@ -155,6 +155,11 @@ void ElEMainScene::miniUpdate()
 	for (int i = 360; i--;)
 		putLine((100 * cos(degtorad*i)) + cX, (100 * sin(degtorad*i)) + cY);
 #pragma endregion EndLineCircle
+#pragma region Circle
+	setCenterX(4012 << 1);
+	setCenterY(4012 << 1);
+	putCircle(50);
+#pragma endregion EndCircle
 
 }
 
@@ -240,6 +245,35 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint & r)
 {
 	//este tambien
+	ElEint	x1 = r - 1,
+		y1 = 0,
+		dx = 1,
+		dy = 1,
+		d = dx - (r << 1);
+	while (x1 >= y1)
+	{
+		putPixel(x + x1, y + y1);
+		putPixel(x + y1, y + x1);
+		putPixel(x - y1, y + x1);
+		putPixel(x - x1, y + y1);
+		putPixel(x - x1, y - y1);
+		putPixel(x - y1, y - x1);
+		putPixel(x + y1, y - x1);
+		putPixel(x + x1, y - y1);
+		if (d <= 0)
+		{
+			++y1;
+			d += dy;
+			dy += 2;
+		}
+		if (d > 0)
+		{
+			--x1;
+			dx += 2;
+			d += ((0-r) << 1) + dx;
+		}
+		//d <= 0 ? ++y1, d += dy, dy += 2 : --x1, dx += 2, d += ((0 - r) << 1) + dx;
+	}
 }
 
 void ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
