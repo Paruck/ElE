@@ -38,6 +38,7 @@ private:
 	void __cdecl putCircle(const ElEuint& x, const ElEuint& y, const ElEuint& r);
 	void __cdecl putLine(const ElEuint& x1, const ElEuint& y1);
 	void __cdecl putCircle(const ElEuint& r);
+	void __cdecl putPixelsCircumference(const ElEuint& x, const ElEuint& y);
 	inline void __cdecl setR(const ElEuchar& _r) { r = _r; }
 	inline void __cdecl setG(const ElEuchar& _g) { g = _g; }
 	inline void __cdecl setB(const ElEuchar& _b) { b = _b; }

@@ -252,25 +252,16 @@ void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint
 		d = dx - (r << 1);
 	while (x1 >= y1)
 	{
-		putPixel(x + x1, y + y1);
-		putPixel(x + y1, y + x1);
-		putPixel(x - y1, y + x1);
-		putPixel(x - x1, y + y1);
-		putPixel(x - x1, y - y1);
-		putPixel(x - y1, y - x1);
-		putPixel(x + y1, y - x1);
-		putPixel(x + x1, y - y1);
+		putPixelsCircumference(x1, y1);
 		if (d <= 0)
 		{
 			++y1;
-			d += dy;
-			dy += 2;
+			d += (dy += 2);
 		}
-		if (d > 0)
+		else
 		{
 			--x1;
-			dx += 2;
-			d += ((0-r) << 1) + dx;
+			d += ((0-r) << 1) + (dx += 2);
 		}
 		//d <= 0 ? ++y1, d += dy, dy += 2 : --x1, dx += 2, d += ((0 - r) << 1) + dx;
 	}
@@ -286,6 +277,18 @@ void ElEMainScene::putCircle(const ElEuint & r)
 {
 	putCircle(cX, cY, r);
 	//esto es lo mismo que el pinche circulo solo hay que usar los centros
+}
+
+void ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
+{
+	putPixel(cX + x, cY + y);
+	putPixel(cX + y, cY + x);
+	putPixel(cX - y, cY + x);
+	putPixel(cX - x, cY + y);
+	putPixel(cX - x, cY - y);
+	putPixel(cX - y, cY - x);
+	putPixel(cX + y, cY - x);
+	putPixel(cX + x, cY - y);
 }
 
 inline void ElEMainScene::clearScreen()
