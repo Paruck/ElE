@@ -25,11 +25,11 @@ private:
 					r = 255,
 					g = 255,
 					b = 0,
-					a = 255,
-					cX = 0,
+					a = 255;
+	ElEuint			cX = 0,
 					cY = 0;
-	const ElEfloat	PI = 3.1415;
-	const ElEfloat	degtorad = PI / 180;
+	const ElEfloat	PI = 3.1415f;
+	const ElEfloat	degtorad = PI / 180.f;
 	static const ElEfloat tris[];
 	ElESurface* surface;
 	void __cdecl refreshText();
@@ -43,7 +43,7 @@ private:
 	void __cdecl putCircle(const ElEuint& r);
 	void __cdecl putPixelsCircumference(const ElEuint& x, const ElEuint& y);
 	void __cdecl putGeometricalFigure(const ElEuint& r, const ElEuint& vertNum);
-	void __cdecl putSerspinskyTriangle(const ElEuint& r, const ElEuint& level);
+	void __cdecl putSerspinskiTriangle(const ElEuint& r, const ElEuint& level);
 	inline void __cdecl setR(const ElEuchar& _r) { r = _r; }
 	inline void __cdecl setG(const ElEuchar& _g) { g = _g; }
 	inline void __cdecl setB(const ElEuchar& _b) { b = _b; }

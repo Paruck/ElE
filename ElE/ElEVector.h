@@ -23,6 +23,7 @@ public:
 	void __cdecl remove(const _IN_ ElEuint& _start, const _IN_ ElEuint& _end);
 	void __cdecl resize(const _IN_ ElEuint& _size);
 	T* __cdecl operator[](const ElEuint& _index);
+	ElEVector<T>* __cdecl operator=(ElEVector<T>& cpy);
 };
 
 template<typename T>
@@ -135,4 +136,13 @@ template<typename T>
 inline T* ElEVector<T>::operator[](const ElEuint & _index)
 {
 	return this->at(_index);
+}
+
+template<typename T>
+inline ElEVector<T>* ElEVector<T>::operator=(ElEVector<T>& cpy)
+{
+	this->clear();
+	for (ElEuint i = cpy.count(); i--;)
+		this->add(*cpy.at(i));
+	return this;
 }
