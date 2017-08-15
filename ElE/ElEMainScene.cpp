@@ -150,8 +150,6 @@ void ElEMainScene::miniUpdate()
 	setA(0);
 	setCenterX(rand() % ElE::getWidth());
 	setCenterY(rand() % ElE::getHeight());
-	const ElEfloat PI = 3.1415;
-	const ElEfloat degtorad = PI / 180;
 	for (int i = 360; i--;)
 		putLine((100 * cos(degtorad*i)) + cX, (100 * sin(degtorad*i)) + cY);
 #pragma endregion EndLineCircle
@@ -289,6 +287,48 @@ void ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
 	putPixel(cX - y, cY - x);
 	putPixel(cX + y, cY - x);
 	putPixel(cX + x, cY - y);
+}
+
+void ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertNum)
+{
+	ElEVector<ElEVector2f>	vertex;
+	ElEfloat				divOffset = 360 / vertNum,
+							currDiv = 0;
+	for (ElEuint i = vertNum; i--; currDiv += divOffset)
+		vertex.add(ElEVector2f(	cX + (r * cos(degtorad * currDiv)),
+								cY + (r * sin(degtorad * currDiv))));
+	for (ElEuint i = vertNum; i--;)
+	{
+		putLine(vertex.at(i)->x, vertex.at(i)->y,
+			vertex.at((i + 1) % vertNum)->x, vertex.at((i + 1) % vertNum)->x);
+	}
+}
+
+void ElEMainScene::putSerspinskiTriangle(const ElEuint & r, const ElEuint & level)
+{
+	ElEVector<ElEVector<ElEVector2f>>	vertex;
+	ElEfloat				divOffset = 360 / 3,
+							currDiv = 0;
+	ElEuint					currTriangleArray = 0,
+							sizeBeforeDivisions;
+	vertex.add(ElEVector<ElEVector2f>());
+	for (ElEuint i = 3; i--; currDiv += divOffset)
+		vertex.at(0)->add(ElEVector2f(cX + (r * cos(degtorad * currDiv)),
+			cY + (r * sin(degtorad * currDiv))));
+	for (ElEuint i = level; i--;)
+	{
+		sizeBeforeDivisions = vertex.count();
+		for (ElEuint j = currTriangleArray; j < sizeBeforeDivisions; ++j)
+		{
+			vertex.add(ElEVector<ElEVector2f>());
+			for (ElEuint k = 3; k--;)
+			{
+				vertex.at(vertex.count()-1)->add(ElEVector2f((vertex.at(j)->at((k + 1) % vertex.at(j)->count())->x - vertex.at(j)->at(k)->x) / 2,
+					(vertex.at(j)->at((k + 1) % vertex.count())->y - vertex.at(j)->at(k)->y) / 2));
+			}
+			++currTriangleArray;
+		}
+	}
 }
 
 inline void ElEMainScene::clearScreen()
