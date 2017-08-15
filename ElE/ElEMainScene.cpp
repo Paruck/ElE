@@ -304,7 +304,7 @@ void ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertN
 	}
 }
 
-void ElEMainScene::putSerspinskiTriangle(const ElEuint & r, const ElEuint & level)
+void ElEMainScene::putSerspinskyTriangle(const ElEuint & r, const ElEuint & level)
 {
 	ElEVector<ElEVector<ElEVector2f>>	vertex;
 	ElEfloat				divOffset = 360 / 3,

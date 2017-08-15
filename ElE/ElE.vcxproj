@@ -171,6 +171,7 @@
     <ClInclude Include="ElEShader.h" />
     <ClInclude Include="ElEThread.h" />
     <ClInclude Include="ElEVector.h" />
+    <ClInclude Include="ElEVector2f.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

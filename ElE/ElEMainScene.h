@@ -43,7 +43,7 @@ private:
 	void __cdecl putCircle(const ElEuint& r);
 	void __cdecl putPixelsCircumference(const ElEuint& x, const ElEuint& y);
 	void __cdecl putGeometricalFigure(const ElEuint& r, const ElEuint& vertNum);
-	void __cdecl putSerspinskiTriangle(const ElEuint& r, const ElEuint& level);
+	void __cdecl putSerspinskyTriangle(const ElEuint& r, const ElEuint& level);
 	inline void __cdecl setR(const ElEuchar& _r) { r = _r; }
 	inline void __cdecl setG(const ElEuchar& _g) { g = _g; }
 	inline void __cdecl setB(const ElEuchar& _b) { b = _b; }
