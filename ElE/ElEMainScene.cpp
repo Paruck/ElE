@@ -71,7 +71,7 @@ void ElEMainScene::Start()
 #pragma region Serspinski
 	setCenterX(512);
 	setCenterY(512);
-	putSerspinskiTriangle(100, 3);
+	putSerspinskiTriangle(100, 5);
 #pragma endregion EndSerspinski
 }
 
@@ -300,51 +300,61 @@ void ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
 
 void ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertNum)
 {
-	ElEVector<ElEVector2f>	vertex;
-	ElEfloat				divOffset = 360.f / vertNum,
-							currDiv = 0;
+	std::vector<ElEVector2f>	vertex;
+	ElEfloat					divOffset = 360.f / vertNum,
+								currDiv = 0;
 	for (ElEuint i = vertNum; i--; currDiv += divOffset)
-		vertex.add(ElEVector2f(	cX + (r * cos(degtorad * currDiv)),
+		vertex.push_back(ElEVector2f(	cX + (r * cos(degtorad * currDiv)),
 								cY + (r * sin(degtorad * currDiv))));
 	for (ElEuint i = vertNum; i--;)
 	{
-		putLine(vertex.at(i)->x, vertex.at(i)->y,
-			vertex.at((i + 1) % vertNum)->x, vertex.at((i + 1) % vertNum)->y);
+		putLine(vertex.at(i).x, vertex.at(i).y,
+			vertex.at((i + 1) % vertNum).x, vertex.at((i + 1) % vertNum).y);
 	}
 }
 
-void ElEMainScene::putSerspinskiTriangle(const ElEuint & r, const ElEuint & level)
+void ElEMainScene::putSierpinskiTriangle(const ElEuint & r, const ElEuint & level)
 {
-	ElEVector<ElEVector<ElEVector2f>>	vertex, tempVertex;
+	std::vector<std::vector<ElEVector2f>>	vertex, tempVertex;
 	ElEfloat				divOffset = 360 / 3,
 							currDiv = 0;
-	vertex.add(ElEVector<ElEVector2f>());
+	vertex.push_back(std::vector<ElEVector2f>());
 	for (ElEuint i = 3; i--; currDiv += divOffset)
-		vertex.at(0)->add(ElEVector2f(cX + (r * cos(degtorad * currDiv)),
+		vertex.at(0).push_back(ElEVector2f(cX + (r * cos(degtorad * currDiv)),
 			cY + (r * sin(degtorad * currDiv))));
 	for (ElEuint i = level; i--;)
 	{
-		for (ElEuint j = vertex.count(); j--;)
+		for (ElEuint j = vertex.size(); j--;)
 		{
-			tempVertex.add(ElEVector<ElEVector2f>());
 			for (ElEuint k = 3; k--;)
 			{
-				tempVertex.at(tempVertex.count() - 1)->add(ElEVector2f(
-					vertex.at(j)->at((k + 1) % 3)->x - vertex.at(j)->at(k)->x,
-					vertex.at(j)->at((k + 1) % 3)->y - vertex.at(j)->at(k)->y));
+				tempVertex.push_back(std::vector<ElEVector2f>());
+				ElEVector2f midPoint = getMidPoint(vertex.at(j).at((k + 1) % 3), vertex.at(j).at(k));
+				tempVertex.at(tempVertex.size() - 1).push_back(ElEVector2f(midPoint.x,midPoint.y));
 			}
+			tempVertex.at(tempVertex.size() - 1).push_back(vertex.at(j).at(1));
+			tempVertex.at(tempVertex.size() - 1).push_back(tempVertex.at(tempVertex.size() - 2).at(0));
+			tempVertex.at(tempVertex.size() - 2).push_back(vertex.at(j).at(2));
+			tempVertex.at(tempVertex.size() - 2).push_back(tempVertex.at(tempVertex.size() - 3).at(0));
+			tempVertex.at(tempVertex.size() - 3).push_back(vertex.at(j).at(0));
+			tempVertex.at(tempVertex.size() - 3).push_back(tempVertex.at(tempVertex.size() - 1).at(0));
 		}
 		vertex = tempVertex;
 		tempVertex.clear();
 	}
-	for (ElEuint i = vertex.count(); i--;)
+	for (ElEuint i = vertex.size(); i--;)
 	{
 		for (ElEuint j = 3; j--;)
 		{
-			putLine(vertex.at(i)->at(j)->x, vertex.at(i)->at(j)->y,
-				vertex.at(i)->at((j + 1) % 3)->x, vertex.at(i)->at((j + 1) % 3)->y);
+			putLine(vertex.at(i).at(j).x, vertex.at(i).at(j).y,
+				vertex.at(i).at((j + 1) % 3).x, vertex.at(i).at((j + 1) % 3).y);
 		}
 	}
+}
+
+ElEVector2f ElEMainScene::getMidPoint(const ElEVector2f & v1, const ElEVector2f & v2)
+{
+	return (v1 + v2)/2;
 }
 
 inline void ElEMainScene::clearScreen()

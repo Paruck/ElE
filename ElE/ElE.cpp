@@ -12,7 +12,7 @@ ElEWindow*								ElE::window;
 ElERender*								ElE::render;
 ElESurface*								ElE::surface;
 ElETexture*								ElE::texture;
-ElEVector<std::function<void()>>		ElE::initFunctions;
+std::vector<void(*)()>					ElE::initFunctions;
 ElEchar*								ElE::windowTitle;
 SDL_Event								ElE::event;
 
@@ -50,11 +50,11 @@ void ElE::App(
 
 void ElE::PrepareJumpTables()
 {
-	initFunctions.add(ElE::InitSFML);
-	initFunctions.add(ElE::InitSDL);
-	initFunctions.add(ElE::InitVulkan);
-	initFunctions.add(ElE::InitCDM);
-	initFunctions.add(ElE::InitOpenGLes20Rasp);
+	initFunctions.push_back(ElE::InitSFML);
+	initFunctions.push_back(ElE::InitSDL);
+	initFunctions.push_back(ElE::InitVulkan);
+	initFunctions.push_back(ElE::InitCDM);
+	initFunctions.push_back(ElE::InitOpenGLes20Rasp);
 }
 
 void ElE::InitSFML()
@@ -239,7 +239,7 @@ void ElE::Init()
 	surface = new ElESurface(graphicsComp);
 	window = new ElEWindow(graphicsComp);
 	texture = new ElETexture(graphicsComp);
-	(*initFunctions.at(graphicsComp))();
+	(initFunctions.at(graphicsComp))();
 }
 
 void ElE::PollEvents()

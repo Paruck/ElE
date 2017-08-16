@@ -70,8 +70,8 @@ ElEThread * ElEThreadPool::RequestThread(_IN_ std::function<void()> func)
 	int i = 0;
 	while (ret == nullptr)
 	{
-		if (!threadPool->at(i)->isActive())
-			ret = threadPool->at(i);
+		if (!threadPool->at(i).isActive())
+			ret = &(threadPool->at(i));
 		++i %= threadSize;
 	}
 	ret->StartThread(func);
@@ -82,9 +82,9 @@ ElEThreadPool::~ElEThreadPool()
 {
 	for (ElEuint i = 0; i < threadPool->count(); ++i)
 	{
-		if (threadPool->at(i)->isActive())
+		if (threadPool->at(i).isActive())
 		{
-			threadPool->at(i)->CloseThread();
+			threadPool->at(i).CloseThread();
 		}
 	}
 	delete threadPool;

@@ -5,6 +5,7 @@
 #include "include\SDL\SDL.h"
 #include "ElE.h"
 #include "ElEVector2f.h"
+#include <vector>
 class ElEMainScene : public ElEScene
 {
 public:
@@ -43,7 +44,8 @@ private:
 	void __cdecl putCircle(const ElEuint& r);
 	void __cdecl putPixelsCircumference(const ElEuint& x, const ElEuint& y);
 	void __cdecl putGeometricalFigure(const ElEuint& r, const ElEuint& vertNum);
-	void __cdecl putSerspinskiTriangle(const ElEuint& r, const ElEuint& level);
+	void __cdecl putSierpinskiTriangle(const ElEuint& r, const ElEuint& level);
+	ElEVector2f __cdecl getMidPoint(const ElEVector2f & v1, const ElEVector2f & v2);
 	inline void __cdecl setR(const ElEuchar& _r) { r = _r; }
 	inline void __cdecl setG(const ElEuchar& _g) { g = _g; }
 	inline void __cdecl setB(const ElEuchar& _b) { b = _b; }

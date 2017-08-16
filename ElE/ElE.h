@@ -30,6 +30,7 @@
 #include <mutex>
 #include <chrono>
 #include <iostream>
+#include <vector>
 #include "ElEVector.h"
 #include "ElEDefines.h"
 #include "ElEThread.h"
@@ -144,7 +145,7 @@ private:
 	static ElERender*								render;
 	static ElESurface*								surface;
 	static ElETexture*								texture;
-	static ElEVector<std::function<void()>>			initFunctions;
+	static std::vector<void(*)()> initFunctions;
 	static ElEchar*									windowTitle;
 	static ElEThreadPool*							threadPool;
 	static SDL_Event								event;
