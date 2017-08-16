@@ -71,7 +71,7 @@ void ElEMainScene::Start()
 #pragma region Serspinski
 	setCenterX(512);
 	setCenterY(512);
-	putSerspinskiTriangle(100, 5);
+	sierpinskiTriangle = putSierpinskiTriangle(100, 5);
 #pragma endregion EndSerspinski
 }
 
@@ -167,6 +167,17 @@ void ElEMainScene::miniUpdate()
 	//setCenterY(512);
 	//putGeometricalFigure(100, 360);
 #pragma endregion EndGeometry
+#pragma region Sierpinski
+	for (ElEuint i = sierpinskiTriangle.size(); i--;)
+	{
+		for (ElEuint j = 3; j--;)
+		{
+			setCenterX(sierpinskiTriangle.at(i).at(j).x);
+			setCenterY(sierpinskiTriangle.at(i).at(j).y);
+			putLine(sierpinskiTriangle.at(i).at((j + 1) % 3).x, sierpinskiTriangle.at(i).at((j + 1) % 3).y);
+		}
+	}
+#pragma endregion EndSierpinski
 
 }
 
@@ -313,7 +324,8 @@ void ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertN
 	}
 }
 
-void ElEMainScene::putSierpinskiTriangle(const ElEuint & r, const ElEuint & level)
+std::vector<std::vector<ElEVector2f>>
+ElEMainScene::putSierpinskiTriangle(const ElEuint & r, const ElEuint & level)
 {
 	std::vector<std::vector<ElEVector2f>>	vertex, tempVertex;
 	ElEfloat				divOffset = 360 / 3,
@@ -342,14 +354,7 @@ void ElEMainScene::putSierpinskiTriangle(const ElEuint & r, const ElEuint & leve
 		vertex = tempVertex;
 		tempVertex.clear();
 	}
-	for (ElEuint i = vertex.size(); i--;)
-	{
-		for (ElEuint j = 3; j--;)
-		{
-			putLine(vertex.at(i).at(j).x, vertex.at(i).at(j).y,
-				vertex.at(i).at((j + 1) % 3).x, vertex.at(i).at((j + 1) % 3).y);
-		}
-	}
+	return vertex;
 }
 
 ElEVector2f ElEMainScene::getMidPoint(const ElEVector2f & v1, const ElEVector2f & v2)

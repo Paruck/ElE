@@ -16,23 +16,25 @@ public:
 	void __cdecl Draw() final;
 	void __cdecl SceneEnd() final;
 private:
-	ElEShader		*vertexS,
-					*fragmentS;
-	ElEuint			programID,
-					*buffers,
-					textureID,
-					frameBufferID;
-	ElEuchar		*pixData,
-					r = 255,
-					g = 255,
-					b = 0,
-					a = 255;
-	ElEuint			cX = 0,
-					cY = 0;
-	const ElEfloat	PI = 3.1415f;
-	const ElEfloat	degtorad = PI / 180.f;
-	static const ElEfloat tris[];
-	ElESurface* surface;
+	ElEShader								*vertexS,
+											*fragmentS;
+	ElEuint									programID,
+											*buffers,
+											textureID,
+											frameBufferID;
+	ElEuchar								*pixData,
+											r = 255,
+											g = 255,
+											b = 0,
+											a = 255;
+	ElEuint									cX = 0,
+											cY = 0;
+	const ElEfloat							PI = 3.1415f;
+	const ElEfloat							degtorad = PI / 180.f;
+	static const ElEfloat					tris[];
+	ElESurface								*surface;
+	std::vector<std::vector<ElEVector2f>>	sierpinskiTriangle;
+
 	void __cdecl refreshText();
 	void __cdecl drawEverything();
 	void __cdecl miniUpdate();
@@ -44,7 +46,7 @@ private:
 	void __cdecl putCircle(const ElEuint& r);
 	void __cdecl putPixelsCircumference(const ElEuint& x, const ElEuint& y);
 	void __cdecl putGeometricalFigure(const ElEuint& r, const ElEuint& vertNum);
-	void __cdecl putSierpinskiTriangle(const ElEuint& r, const ElEuint& level);
+	std::vector<std::vector<ElEVector2f>> __cdecl putSierpinskiTriangle(const ElEuint& r, const ElEuint& level);
 	ElEVector2f __cdecl getMidPoint(const ElEVector2f & v1, const ElEVector2f & v2);
 	inline void __cdecl setR(const ElEuchar& _r) { r = _r; }
 	inline void __cdecl setG(const ElEuchar& _g) { g = _g; }
