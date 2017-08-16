@@ -29,8 +29,6 @@ private:
 											a = 255;
 	ElEuint									cX = 0,
 											cY = 0;
-	const ElEfloat							PI = 3.1415f;
-	const ElEfloat							degtorad = PI / 180.f;
 	static const ElEfloat					tris[];
 	ElESurface								*surface;
 	std::vector<std::vector<ElEVector2f>>	sierpinskiTriangle;

@@ -19,7 +19,10 @@ typedef unsigned char		ElEuchar;
 typedef ElEbool				FLAG;
 typedef float				ElEfloat;
 
-const ElEint threadAmmount = 4;
+const ElEint	threadAmmount = 4;
+const ElEfloat	PI = 3.1415f;
+const ElEfloat	degtorad = PI / 180.f;
+
 
 typedef struct ElERect {
 	ElEint x, y;

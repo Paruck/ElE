@@ -1,5 +1,6 @@
 #include "ElEMainScene.h"
 #include "ElE.h"
+#include "ElEMatrix3x3.h"
 
 const ElEfloat ElEMainScene::tris[]{
 	-1.0f, -1.0f, 0.0f, 1.0f,
@@ -90,7 +91,7 @@ void ElEMainScene::Update()
 		nullptr, nullptr);
 	SDL_DestroyTexture(renderTexture);
 #endif
-	//clearScreen();
+	clearScreen();
 	
 }
 
@@ -145,6 +146,8 @@ void ElEMainScene::drawEverything()
 #endif
 }
 
+ElEint roti = 0, transi = 0;
+ElEbool movingLeft = ElEfalse;
 void ElEMainScene::miniUpdate()
 {
 	setR(rand() % 255);
@@ -168,13 +171,27 @@ void ElEMainScene::miniUpdate()
 	//putGeometricalFigure(100, 360);
 #pragma endregion EndGeometry
 #pragma region Sierpinski
+	ElEMatrix3x3 compound, trans, scale, rot;
+	trans.Translation2D(-512, -512);
+	rot.Rotation2D(roti = (roti + 1) % 100);
+	compound *= trans;
+	compound *= rot;
+	trans.Translation2D(512, 512);
+	compound *= trans;
+	if (movingLeft)
+		trans.Translation2D(transi--, 0);
+	else trans.Translation2D(transi++, 0);
+	if (transi <= 0-512) movingLeft = ElEfalse;
+	else if (transi >= 512) movingLeft = ElEtrue;
 	for (ElEuint i = sierpinskiTriangle.size(); i--;)
 	{
 		for (ElEuint j = 3; j--;)
-		{
-			setCenterX(sierpinskiTriangle.at(i).at(j).x);
-			setCenterY(sierpinskiTriangle.at(i).at(j).y);
-			putLine(sierpinskiTriangle.at(i).at((j + 1) % 3).x, sierpinskiTriangle.at(i).at((j + 1) % 3).y);
+		{ 
+			ElEVector2f v1 = sierpinskiTriangle.at(i).at(j) * compound,
+						v2 = sierpinskiTriangle.at(i).at((j + 1) % 3) * compound;
+			setCenterX(v1.x);
+			setCenterY(v1.y);
+			putLine(v2.x, v2.y);
 		}
 	}
 #pragma endregion EndSierpinski
@@ -225,8 +242,6 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 				d = 2 * dx - dy;
 		while (yt != y1)
 		{
-			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
-			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
 			if (d > 0)
 			{
@@ -245,8 +260,6 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 				d = 2 * dy - dx;
 		while (xt != x1)
 		{
-			if (xt > ElE::getWidth() || xt < 0) { printf("wtf"); return; }
-			if (yt > ElE::getHeight() || yt < 0) { printf("wtf"); return; }
 			putPixel(xt, yt);
 			if (d > 0)
 			{

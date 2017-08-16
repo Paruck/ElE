@@ -1,16 +1,40 @@
 #include "ElEMatrix3x3.h"
 #include "ElEVector2f.h"
+#include <cmath>
 
 
 ElEMatrix3x3::ElEMatrix3x3()
 {
 	for (ElEint i = 9; i--;)
 		arr[i] = 0;
+	arr[0] = 1;
+	arr[4] = 1;
+	arr[8] = 1;
 }
 
 
 ElEMatrix3x3::~ElEMatrix3x3()
 {
+}
+
+void ElEMatrix3x3::Translation2D(const ElEfloat & x, const ElEfloat & y)
+{
+	arr[2] = x;
+	arr[5] = y;
+}
+
+void ElEMatrix3x3::Scale2D(const ElEfloat & x, const ElEfloat & y)
+{
+	arr[0] = x;
+	arr[4] = y;
+}
+
+void ElEMatrix3x3::Rotation2D(const ElEfloat & ang)
+{
+	arr[0] = cos(ang*degtorad);
+	arr[3] = sin(ang*degtorad);
+	arr[1] = 0 - arr[3];
+	arr[4] = arr[0];
 }
 
 ElEMatrix3x3 & ElEMatrix3x3::operator+=(const ElEMatrix3x3 & rhs)
