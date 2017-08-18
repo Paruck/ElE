@@ -72,7 +72,7 @@ void ElEMainScene::Start()
 #pragma region Serspinski
 	setCenterX(512);
 	setCenterY(512);
-	sierpinskiTriangle = putSierpinskiTriangle(100, 5);
+	sierpinskiTriangle = putSierpinskiTriangle(200, 5);
 #pragma endregion EndSerspinski
 }
 
@@ -173,7 +173,7 @@ void ElEMainScene::miniUpdate()
 #pragma region Sierpinski
 	ElEMatrix3x3 compound, trans, scale, rot;
 	trans.Translation2D(-512, -512);
-	rot.Rotation2D(roti = (roti + 1) % 100);
+	rot.Rotation2D(roti = (roti + 1) % 360);
 	compound *= trans;
 	compound *= rot;
 	trans.Translation2D(512, 512);
@@ -183,6 +183,10 @@ void ElEMainScene::miniUpdate()
 	else trans.Translation2D(transi++, 0);
 	if (transi <= 0-512) movingLeft = ElEfalse;
 	else if (transi >= 512) movingLeft = ElEtrue;
+	compound *= trans;
+	//roti = (roti + 1) % 4;
+	//scale.Scale2D(roti, roti);
+	//compound *= scale;
 	for (ElEuint i = sierpinskiTriangle.size(); i--;)
 	{
 		for (ElEuint j = 3; j--;)

@@ -32,8 +32,8 @@ void ElEMatrix3x3::Scale2D(const ElEfloat & x, const ElEfloat & y)
 void ElEMatrix3x3::Rotation2D(const ElEfloat & ang)
 {
 	arr[0] = cos(ang*degtorad);
-	arr[3] = sin(ang*degtorad);
-	arr[1] = 0 - arr[3];
+	arr[1] = sin(ang*degtorad);
+	arr[3] = 0 - arr[1];
 	arr[4] = arr[0];
 }
 
@@ -53,15 +53,15 @@ ElEMatrix3x3 & ElEMatrix3x3::operator-=(const ElEMatrix3x3 & rhs)
 
 ElEMatrix3x3 & ElEMatrix3x3::operator*=(const ElEMatrix3x3 & rhs)
 {
-	arr[0] = (arr[0] * rhs.arr[0]) + (arr[1] * rhs.arr[3]) + (arr[2] * rhs.arr[6]);
-	arr[1] = (arr[0] * rhs.arr[1]) + (arr[1] * rhs.arr[4]) + (arr[2] * rhs.arr[7]);
-	arr[2] = (arr[0] * rhs.arr[2]) + (arr[1] * rhs.arr[5]) + (arr[2] * rhs.arr[8]);
-	arr[3] = (arr[3] * rhs.arr[0]) + (arr[4] * rhs.arr[3]) + (arr[5] * rhs.arr[6]);
-	arr[4] = (arr[3] * rhs.arr[1]) + (arr[4] * rhs.arr[4]) + (arr[5] * rhs.arr[7]);
-	arr[5] = (arr[3] * rhs.arr[2]) + (arr[4] * rhs.arr[5]) + (arr[5] * rhs.arr[8]);
-	arr[6] = (arr[6] * rhs.arr[0]) + (arr[7] * rhs.arr[3]) + (arr[8] * rhs.arr[6]);
-	arr[7] = (arr[6] * rhs.arr[1]) + (arr[7] * rhs.arr[4]) + (arr[8] * rhs.arr[7]);
-	arr[8] = (arr[6] * rhs.arr[2]) + (arr[7] * rhs.arr[5]) + (arr[8] * rhs.arr[8]);
+	arr[0] = (rhs.arr[0] * arr[0]) + (rhs.arr[1] * arr[3]) + (rhs.arr[2] * arr[6]);
+	arr[1] = (rhs.arr[0] * arr[1]) + (rhs.arr[1] * arr[4]) + (rhs.arr[2] * arr[7]);
+	arr[2] = (rhs.arr[0] * arr[2]) + (rhs.arr[1] * arr[5]) + (rhs.arr[2] * arr[8]);
+	arr[3] = (rhs.arr[3] * arr[0]) + (rhs.arr[4] * arr[3]) + (rhs.arr[5] * arr[6]);
+	arr[4] = (rhs.arr[3] * arr[1]) + (rhs.arr[4] * arr[4]) + (rhs.arr[5] * arr[7]);
+	arr[5] = (rhs.arr[3] * arr[2]) + (rhs.arr[4] * arr[5]) + (rhs.arr[5] * arr[8]);
+	arr[6] = (rhs.arr[6] * arr[0]) + (rhs.arr[7] * arr[3]) + (rhs.arr[8] * arr[6]);
+	arr[7] = (rhs.arr[6] * arr[1]) + (rhs.arr[7] * arr[4]) + (rhs.arr[8] * arr[7]);
+	arr[8] = (rhs.arr[6] * arr[2]) + (rhs.arr[7] * arr[5]) + (rhs.arr[8] * arr[8]);
 	return *this;	
 }
 
