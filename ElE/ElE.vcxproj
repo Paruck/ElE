@@ -155,6 +155,7 @@
     <ClCompile Include="ElE.cpp" />
     <ClCompile Include="ElEMainScene.cpp" />
     <ClCompile Include="ElEMatrix3x3.cpp" />
+    <ClCompile Include="ElEMesh.cpp" />
     <ClCompile Include="ElEScene.cpp" />
     <ClCompile Include="ElESceneManager.cpp" />
     <ClCompile Include="ElEShader.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="ElEDefines.h" />
     <ClInclude Include="ElEMainScene.h" />
     <ClInclude Include="ElEMatrix3x3.h" />
+    <ClInclude Include="ElEMesh.h" />
     <ClInclude Include="ElENode.h" />
     <ClInclude Include="ElEQueue.h" />
     <ClInclude Include="ElEScene.h" />

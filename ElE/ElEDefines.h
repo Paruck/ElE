@@ -11,11 +11,31 @@ typedef enum ElEBoolean
 	ElEtrue,
 }ElEBoolean;
 
-typedef ElEBoolean			ElEbool;
+#ifdef RASPBERRY_COMPILE
+#include <inttypes.h>
+#include <cstdint>
+typedef int32_t				ElEint;
+typedef uint32_t			ElEuint;
+typedef int8_t				ElEbyte;
+typedef uint8_t				ElEubyte;
+typedef uint32_t			ElEsize_t;
+
+#else
 typedef __int32				ElEint;
 typedef unsigned __int32	ElEuint;
+typedef __int8				ElEbyte;
+typedef unsigned __int8		ElEubyte;
+typedef unsigned __int32	ElEsize_t;
+
+#endif
+
+typedef ElEBoolean			ElEbool;
 typedef char				ElEchar;
 typedef unsigned char		ElEuchar;
+typedef void				ElEvoid;
+typedef short				ElEshort;
+typedef unsigned short		ElEushort;
+typedef double				ElEdouble;
 typedef ElEbool				FLAG;
 typedef float				ElEfloat;
 

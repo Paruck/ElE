@@ -20,7 +20,7 @@ ElEMainScene::~ElEMainScene()
 {
 }
 
-void ElEMainScene::Start()
+ElEvoid ElEMainScene::Start()
 {
 #ifdef RASPBERRY_COMPILE
 	vertexS->LoadVertexShader("vShader.glsl");
@@ -76,7 +76,7 @@ void ElEMainScene::Start()
 #pragma endregion EndSerspinski
 }
 
-void ElEMainScene::Update()
+ElEvoid ElEMainScene::Update()
 {
 	miniUpdate();
 	refreshText();
@@ -95,17 +95,17 @@ void ElEMainScene::Update()
 	
 }
 
-void ElEMainScene::Draw()
+ElEvoid ElEMainScene::Draw()
 {
 
 }
 
-void ElEMainScene::SceneEnd()
+ElEvoid ElEMainScene::SceneEnd()
 {
 
 }
 
-void ElEMainScene::refreshText()
+ElEvoid ElEMainScene::refreshText()
 {
 #ifdef RASPBERRY_COMPILE
 	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -116,7 +116,7 @@ void ElEMainScene::refreshText()
 #endif
 }
 
-void ElEMainScene::drawEverything()
+ElEvoid ElEMainScene::drawEverything()
 {
 #ifdef RASPBERRY_COMPILE
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID);
@@ -148,7 +148,7 @@ void ElEMainScene::drawEverything()
 
 ElEint roti = 0, transi = 0;
 ElEbool movingLeft = ElEfalse;
-void ElEMainScene::miniUpdate()
+ElEvoid ElEMainScene::miniUpdate()
 {
 	setR(rand() % 255);
 	setG(rand() % 255);
@@ -202,7 +202,7 @@ void ElEMainScene::miniUpdate()
 
 }
 
-void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar & r, const ElEuchar & g, const ElEuchar & b, const ElEuchar & a)
+ElEvoid ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar & r, const ElEuchar & g, const ElEuchar & b, const ElEuchar & a)
 {
 	int offset = (x + (y * ElE::getWidth())) * 4;
 	if (offset < 0 || offset > ElE::getWidth() * ElE::getHeight() *4)
@@ -214,7 +214,7 @@ void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y, const ElEuchar
 	pixData[offset + 3] = a;
 }
 
-void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
+ElEvoid ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
 {
 	int offset = (x + (y * ElE::getWidth())) * 4;
 	if (offset < 0 || offset > ElE::getWidth() * ElE::getHeight() * 4)
@@ -226,7 +226,7 @@ void ElEMainScene::putPixel(const ElEuint & x, const ElEuint & y)
 	pixData[offset + 3] = a;
 }
 
-void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint & x1, const ElEuint & y1)
+ElEvoid ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint & x1, const ElEuint & y1)
 {
 	//diseñar este pedo en putiza
 	ElEint	dx = x1 - x,
@@ -277,7 +277,7 @@ void ElEMainScene::putLine(const ElEuint & x, const ElEuint & y, const ElEuint &
 	}
 }
 
-void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint & r)
+ElEvoid ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint & r)
 {
 	//este tambien
 	ElEint	x1 = r - 1,
@@ -302,19 +302,19 @@ void ElEMainScene::putCircle(const ElEuint & x, const ElEuint & y, const ElEuint
 	}
 }
 
-void ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
+ElEvoid ElEMainScene::putLine(const ElEuint & x1, const ElEuint & y1)
 {
 	putLine(cX, cY, x1, y1);
 	
 }
 
-void ElEMainScene::putCircle(const ElEuint & r)
+ElEvoid ElEMainScene::putCircle(const ElEuint & r)
 {
 	putCircle(cX, cY, r);
 	//esto es lo mismo que el pinche circulo solo hay que usar los centros
 }
 
-void ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
+ElEvoid ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
 {
 	putPixel(cX + x, cY + y);
 	putPixel(cX + y, cY + x);
@@ -326,7 +326,7 @@ void ElEMainScene::putPixelsCircumference(const ElEuint & x, const ElEuint & y)
 	putPixel(cX + x, cY - y);
 }
 
-void ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertNum)
+ElEvoid ElEMainScene::putGeometricalFigure(const ElEuint & r, const ElEuint & vertNum)
 {
 	std::vector<ElEVector2f>	vertex;
 	ElEfloat					divOffset = 360.f / vertNum,
@@ -379,7 +379,7 @@ ElEVector2f ElEMainScene::getMidPoint(const ElEVector2f & v1, const ElEVector2f 
 	return (v1 + v2)/2;
 }
 
-inline void ElEMainScene::clearScreen()
+inline ElEvoid ElEMainScene::clearScreen()
 {
 	for (int i = ElE::getWidth() * ElE::getHeight() * 4; i--;)
 		pixData[i] = 0;

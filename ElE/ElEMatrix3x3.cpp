@@ -17,19 +17,19 @@ ElEMatrix3x3::~ElEMatrix3x3()
 {
 }
 
-void ElEMatrix3x3::Translation2D(const ElEfloat & x, const ElEfloat & y)
+ElEvoid ElEMatrix3x3::Translation2D(const ElEfloat & x, const ElEfloat & y)
 {
 	arr[2] = x;
 	arr[5] = y;
 }
 
-void ElEMatrix3x3::Scale2D(const ElEfloat & x, const ElEfloat & y)
+ElEvoid ElEMatrix3x3::Scale2D(const ElEfloat & x, const ElEfloat & y)
 {
 	arr[0] = x;
 	arr[4] = y;
 }
 
-void ElEMatrix3x3::Rotation2D(const ElEfloat & ang)
+ElEvoid ElEMatrix3x3::Rotation2D(const ElEfloat & ang)
 {
 	arr[0] = cos(ang*degtorad);
 	arr[1] = sin(ang*degtorad);
