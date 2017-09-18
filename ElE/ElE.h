@@ -1,4 +1,11 @@
 #pragma once
+//#define RASPBERRY_COMPILE
+
+#include "ElEVector.h"
+#include "ElEDefines.h"
+#include "ElEThread.h"
+#include "ElESceneManager.h"
+
 #ifndef RASPBERRY_COMPILE
 #include <SDL\SDL.h>
 #include <SFML\Main.hpp>
@@ -31,17 +38,15 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
-#include "ElEVector.h"
-#include "ElEDefines.h"
-#include "ElEThread.h"
-#include "ElESceneManager.h"
 
+#define RASPBERRY_COMPILE
 class ElEGLContext {
+public:
 	union Context {
 #ifdef RASPBERRY_COMPILE
-		EGLContext*				context;
+		EGLContext				EGLcontext;
 #endif
-	};
+	}context;
 	ElEGLContext() = delete;
 	ElEGLContext(const ElEGraphicsComponents& renderT);
 	~ElEGLContext();
@@ -136,53 +141,55 @@ class ElE
 private:
 	static ElEGraphicsComponents					graphicsComp;
 	static ElEAudioComponents						audioComp;
-	static ElEPhysicsComponents						physicsComp;
-	static ElEint									setFlags,
-													screenWidth,
+	static ElEPhysicsComponents					physicsComp;
+	static ElEint									setFlags;
+	static ElEuint									screenWidth,
 													screenHeight;
 	static MotorFlags								motorFlags;
 	static ElEWindow*								window;
 	static ElERender*								render;
 	static ElESurface*								surface;
 	static ElETexture*								texture;
-	static std::vector<void(*)()> initFunctions;
-	static ElEchar*									windowTitle;
+	static ElEGLContext*                           context;
+	static std::vector<void(*)()>                initFunctions;
+	static ElEchar*								windowTitle;
 	static ElEThreadPool*							threadPool;
+#ifndef RASPBERRY_COMPILE
 	static SDL_Event								event;
-#ifdef RASPBERRY_COMPILE
 
 #endif
 public:
-	static void __cdecl App(const _IN_ ElEGraphicsComponents&			graph,
+	static void ElEcall App(const _IN_ ElEGraphicsComponents&			graph,
 					const _IN_ ElEAudioComponents&				audio,
 					const _IN_ ElEPhysicsComponents&			phys,
 					const _IN_ ElEint&							flags,
 					const _IN_ MotorFlags&						mFlags,
-					const _IN_ ElEint&							width,
-					const _IN_ ElEint&							height,
+					const _IN_ ElEuint&							width,
+					const _IN_ ElEuint&							height,
 					_IN_ ElEchar*								title);
-	static inline ElEint __cdecl getWidth() { return screenWidth; }
-	static inline ElEint __cdecl getHeight() { return screenHeight; }
-	static inline ElERender* __cdecl getRender() { return render; }
-	static inline ElESurface* __cdecl getSurface() { return surface; }
-	static inline ElETexture* __cdecl getTexture() { return texture; }
-	static inline ElEWindow* __cdecl getWindow() { return window; }
-	static inline ElEGraphicsComponents __cdecl getGraphicsRenderer() { return graphicsComp; }
+	static inline ElEuint ElEcall getWidth() { return screenWidth; }
+	static inline ElEuint ElEcall getHeight() { return screenHeight; }
+	static inline ElERender* ElEcall getRender() { return render; }
+	static inline ElESurface* ElEcall getSurface() { return surface; }
+	static inline ElETexture* ElEcall getTexture() { return texture; }
+	static inline ElEWindow* ElEcall getWindow() { return window; }
+	static inline ElEGLContext* ElEcall getContext() { return context; }
+ 	static inline ElEGraphicsComponents ElEcall getGraphicsRenderer() { return graphicsComp; }
 #ifdef RASPBERRY_COMPILE
-	static void __cdecl PutPixel();
+	static void ElEcall PutPixel();
 
 #endif
 private:
-	static void __cdecl PrepareJumpTables();
-	static void __cdecl InitSFML();
-	static void __cdecl InitSDL();
-	static void __cdecl InitVulkan();
-	static void __cdecl InitCDM();
-	static void __cdecl InitOpenGLes20Rasp();
-	static void __cdecl Init();
-	static void __cdecl PollEvents();
+	static void ElEcall PrepareJumpTables();
+	static void ElEcall InitSFML();
+	static void ElEcall InitSDL();
+	static void ElEcall InitVulkan();
+	static void ElEcall InitCDM();
+	static void ElEcall InitOpenGLes20Rasp();
+	static void ElEcall Init();
+	static void ElEcall PollEvents();
 #ifdef RASPBERRY_COMPILE
-	static void __cdecl InitGLesPlane();
+	static void ElEcall InitGLesPlane();
 #endif
 	ElE();
 	~ElE();

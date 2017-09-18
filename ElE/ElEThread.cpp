@@ -8,7 +8,7 @@ void ElEThread::TesterFunc(_IN_ std::function<void()> func)
 	active = ElEfalse;
 }
 
-ElEThread::ElEThread() 
+ElEThread::ElEThread()
 {
 	t = nullptr;
 	active = ElEfalse;
@@ -52,15 +52,16 @@ ElEThread ElEThread::operator=(const ElEThread & th)
 {
 	t = th.t;
 	active = th.active;
-	return ElEThread();
+	return th;
 }
 
 ElEThreadPool*	ElEThreadPool::instance;
 ElEThreadPool::ElEThreadPool(const _IN_ ElEuint & amountOfThreads)
 {
-	threadPool = new ElEVector<ElEThread>(amountOfThreads);
+	threadPool = new std::vector<ElEThread>();
+	threadPool->reserve(amountOfThreads);
 	for(ElEuint i = amountOfThreads; i--;)
-		threadPool->add(ElEThread());
+		threadPool->push_back(ElEThread());
 	threadSize = amountOfThreads;
 }
 
@@ -80,7 +81,7 @@ ElEThread * ElEThreadPool::RequestThread(_IN_ std::function<void()> func)
 
 ElEThreadPool::~ElEThreadPool()
 {
-	for (ElEuint i = 0; i < threadPool->count(); ++i)
+	for (ElEuint i = 0; i < threadPool->size(); ++i)
 	{
 		if (threadPool->at(i).isActive())
 		{

@@ -17,18 +17,18 @@ typedef std::vector<ElEubyte>	ElEIndexes;
 //	ElEVector();
 //	ElEVector(const _IN_ ElEuint& _size);
 //	~ElEVector();
-//	const T* __cdecl data();
-//	T __cdecl at(const _IN_ ElEuint& _index);
-//	ElEvoid __cdecl add(_IN_ T _obj);
-//	ElEvoid __cdecl clear();
-//	ElEuint __cdecl count();
-//	ElEvoid __cdecl insert(_IN_ T* _objs, const _IN_ ElEuint& _size);
-//	T __cdecl pop();
-//	ElEbool __cdecl empty();
-//	ElEvoid __cdecl remove(const _IN_ ElEuint& _start, const _IN_ ElEuint& _end);
-//	ElEvoid __cdecl resize(const _IN_ ElEuint& _size);
-//	T __cdecl operator[](const ElEuint& _index);
-//	ElEVector<T> __cdecl operator=(ElEVector<T>& cpy);
+//	const T* ElEcall data();
+//	T ElEcall at(const _IN_ ElEuint& _index);
+//	ElEvoid ElEcall add(_IN_ T _obj);
+//	ElEvoid ElEcall clear();
+//	ElEuint ElEcall count();
+//	ElEvoid ElEcall insert(_IN_ T* _objs, const _IN_ ElEuint& _size);
+//	T ElEcall pop();
+//	ElEbool ElEcall empty();
+//	ElEvoid ElEcall remove(const _IN_ ElEuint& _start, const _IN_ ElEuint& _end);
+//	ElEvoid ElEcall resize(const _IN_ ElEuint& _size);
+//	T ElEcall operator[](const ElEuint& _index);
+//	ElEVector<T> ElEcall operator=(ElEVector<T>& cpy);
 //};
 //
 //template<typename T>
@@ -46,7 +46,7 @@ typedef std::vector<ElEubyte>	ElEIndexes;
 //	size = 0;
 //	currRealSize = _size;
 //}
-// 
+//
 //template<typename T>
 //inline ElEVector<T>::~ElEVector()
 //{

@@ -8,11 +8,11 @@ class ElEQueue
 public:
 	ElEQueue();
 	~ElEQueue();
-	void __cdecl Add(_IN_ T elem);
-	T __cdecl Pop();
-	T __cdecl Peek();
-	void __cdecl Clear();
-	inline ElEbool __cdecl Empty() { return phead == nullptr ? ElEtrue : ElEfalse; }
+	void ElEcall Add(_IN_ T elem);
+	T ElEcall Pop();
+	T ElEcall Peek();
+	void ElEcall Clear();
+	inline ElEbool ElEcall Empty() { return phead == nullptr ? ElEtrue : ElEfalse; }
 private:
 	ElENode<T>	*phead = nullptr,
 				*ptail = nullptr;

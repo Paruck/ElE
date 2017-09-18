@@ -4,8 +4,8 @@
 ElEGraphicsComponents					ElE::graphicsComp;
 ElEAudioComponents						ElE::audioComp;
 ElEPhysicsComponents					ElE::physicsComp;
-ElEint									ElE::setFlags,
-										ElE::screenWidth,
+ElEint									ElE::setFlags;
+ElEuint									ElE::screenWidth,
 										ElE::screenHeight;
 MotorFlags								ElE::motorFlags;
 ElEWindow*								ElE::window;
@@ -14,16 +14,18 @@ ElESurface*								ElE::surface;
 ElETexture*								ElE::texture;
 std::vector<void(*)()>					ElE::initFunctions;
 ElEchar*								ElE::windowTitle;
+ElEGLContext*                           ElE::context;
+#ifndef RASPBERRY_COMPILE
 SDL_Event								ElE::event;
-
+#endif
 void ElE::App(
 	const _IN_ ElEGraphicsComponents & graph,
 	const _IN_ ElEAudioComponents & audio,
 	const _IN_ ElEPhysicsComponents & phys,
 	const _IN_ ElEint & flags,
 	const _IN_ MotorFlags & mFlags,
-	const _IN_ ElEint & width,
-	const _IN_ ElEint & height,
+	const _IN_ ElEuint & width,
+	const _IN_ ElEuint & height,
 	_IN_ ElEchar* title)
 {
 	graphicsComp = graph;
@@ -40,11 +42,13 @@ void ElE::App(
 	ElESceneManager::getInstance()->ChangeScene(new ElEMainScene());
 	while (1)
 	{
+	#ifndef RASPBERRY_COMPILE
 		PollEvents();
 		if (event.type == SDL_QUIT) exit(0);
 		SDL_RenderClear(render->render.sdlRender);
-		ElESceneManager::getInstance()->SceneMainLoop();
 		SDL_RenderPresent(render->render.sdlRender);
+    #endif
+		ElESceneManager::getInstance()->SceneMainLoop();
 	}
 }
 
@@ -53,12 +57,13 @@ void ElE::PrepareJumpTables()
 	initFunctions.push_back(ElE::InitSFML);
 	initFunctions.push_back(ElE::InitSDL);
 	initFunctions.push_back(ElE::InitVulkan);
-	initFunctions.push_back(ElE::InitCDM);
 	initFunctions.push_back(ElE::InitOpenGLes20Rasp);
+	initFunctions.push_back(ElE::InitCDM);
 }
 
 void ElE::InitSFML()
 {
+#ifndef RASPBERRY_COMPILE
 	window = new ElEWindow(graphicsComp);
 	ElEint f = 0;
 	if (setFlags & none)
@@ -86,18 +91,20 @@ void ElE::InitSFML()
 	}
 	else
 		window->window.sfmlWindow = new sf::Window(sf::VideoMode(screenWidth, screenHeight), windowTitle, f);
+		#endif
 }
 
 void ElE::InitSDL()
 {
-	//Inicializaciones, SDL se encarga de detectar la plataforma 
+#ifndef RASPBERRY_COMPILE
+	//Inicializaciones, SDL se encarga de detectar la plataforma
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		//Manejo de errores criticos, cierra la aplicacion al encontrar un error
 		SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
 		exit(-1);
 	}
-	//Se encarga de comprobar si al inicializar la escenas hay un error 
+	//Se encarga de comprobar si al inicializar la escenas hay un error
 	if (SDL_CreateWindowAndRenderer(screenWidth, screenHeight, motorFlags.sdl, &window->window.sdlWindow, &render->render.sdlRender) == -1)
 	{
 		SDL_Log("Failed to initialize Window: %s", SDL_GetError());
@@ -131,6 +138,7 @@ void ElE::InitSDL()
 	}
 	Mix_VolumeMusic(100);
 	SDL_SetRenderDrawColor(render->render.sdlRender, 0, 0, 0, 255);
+	#endif
 }
 
 void ElE::InitVulkan()
@@ -143,15 +151,19 @@ void ElE::InitCDM()
 
 }
 
+#define RASPBERRY_COMPILE
 void ElE::InitOpenGLes20Rasp()
 {
 #ifdef RASPBERRY_COMPILE
 	bcm_host_init();
 
 	static EGL_DISPMANX_WINDOW_T 	nativeWindow;
-	DISPMANX_ELEMENT_HANDLE_T	dispman_element;
-	DISPMANX_DISPLAY_HANDLE_T	dispman_display;
-	DISPMANX_UPDATE_HANDLE_T	dispman_update;
+	DISPMANX_ELEMENT_HANDLE_T	    dispman_element;
+	DISPMANX_DISPLAY_HANDLE_T	    dispman_display;
+	DISPMANX_UPDATE_HANDLE_T	    dispman_update;
+	EGLBoolean                      result;
+	ElEint				            success = 0;
+	ElEint 				            num_config;
 	VC_RECT_T dst_rect;
 	VC_RECT_T src_rect;
 	static const EGLint attribute_list[] =
@@ -170,22 +182,22 @@ void ElE::InitOpenGLes20Rasp()
 		EGL_CONTEXT_CLIENT_VERSION,	2,
 		EGL_NONE
 	};
-
+    context = new ElEGLContext(graphicsComp);
 	EGLConfig config;
-	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-	assert(display != EGL_NO_DISPLAY);
+	render->render.eglRender = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+	assert(render->render.eglRender != EGL_NO_DISPLAY);
 
-	result = eglInitialize(display, NULL, NULL);
+	result = eglInitialize(render->render.eglRender, NULL, NULL);
 	assert(result != EGL_FALSE);
 
-	result = eglChooseConfig(display, attribute_list, &config, 1, &num_config);
+    result = eglChooseConfig(render->render.eglRender, attribute_list, &config, 1, &num_config);
 	assert(result != EGL_FALSE);
 
 	result = eglBindAPI(EGL_OPENGL_ES_API);
 	assert(result != EGL_FALSE);
 
-	context = eglCreateContext(display, config,
-		EGL_NO_CONTEXT, context_attributes);
+	context->context.EGLcontext = eglCreateContext(render->render.eglRender, config,
+        EGL_NO_CONTEXT, context_attributes);
 	assert(context != EGL_NO_CONTEXT);
 
 	success = graphics_get_display_size(0, &screenWidth, &screenHeight);
@@ -215,20 +227,25 @@ void ElE::InitOpenGLes20Rasp()
 	nativeWindow.height = screenHeight;
 	vc_dispmanx_update_submit_sync(dispman_update);
 
-	hWnd = &nativeWindow;
-	surface = eglCreateWindowSurface(display, config,
-		hWnd, NULL);
-	assert(surface != EGL_NO_SURFACE);
+	window->window.eglWindow = &nativeWindow;
+	surface->surface.eglSurface = eglCreateWindowSurface(render->render.eglRender, config,
+		window->window.eglWindow, NULL);
+	assert(surface->surface.eglSurface != EGL_NO_SURFACE);
 
-	result = eglMakeCurrent(display, surface, surface, context);
+	result = eglMakeCurrent(render->render.eglRender, surface->surface.eglSurface,
+	 surface->surface.eglSurface, context->context.EGLcontext);
 	assert(result != EGL_FALSE);
 
-	glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glViewport(0, 0, screenWidth, screenHeight);
-	eglSwapBuffers(display, surface);
+	eglSwapBuffers(render->render.eglRender, surface->surface.eglSurface);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
+	glEnable(GL_BLEND);
+	glEnable(GL_SCISSOR_TEST);
 	std::cout << "OpenGLes initialized" << std::endl;
 #endif
 }
@@ -245,14 +262,17 @@ void ElE::Init()
 void ElE::PollEvents()
 {
 	//cambiar por tabla de salto
-#ifndef RASPBERRY_COMPILE
 	switch (graphicsComp)
 	{
+#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		SDL_PollEvent(&event);
 	break;
-	}
+#else
+    case OpenGLes20Rasp:
+        break;
 #endif
+	}
 }
 
 #ifdef RASPBERRY_COMPILE
@@ -275,16 +295,16 @@ ElEWindow::ElEWindow(const ElEGraphicsComponents & renderT)
 	type = renderT;
 	switch (renderT)
 	{
+#ifndef RASPBERRY_COMPILE
 	case OpenGL:
 		window.sfmlWindow = nullptr;
 		break;
-	case OpenGLes20Rasp:
-#ifdef RASPBERRY_COMPILE
-		window.eglWindow = nullptr;
-#endif 
-		break;
 	case SDLGraphics:
 		window.sdlWindow = nullptr;
+		break;
+#endif
+	case OpenGLes20Rasp:
+		window.eglWindow = nullptr;
 		break;
 	}
 }
@@ -293,9 +313,11 @@ ElEWindow::~ElEWindow()
 {
 	switch (type)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		SDL_DestroyWindow(window.sdlWindow);
 		break;
+    #endif
 	}
 }
 
@@ -304,9 +326,11 @@ ElESurface::ElESurface(const ElEGraphicsComponents & renderT)
 	type = renderT;
 	switch (renderT)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		surface.sdlSurface = nullptr;
 		break;
+    #endif
 	}
 }
 
@@ -314,9 +338,11 @@ ElESurface::~ElESurface()
 {
 	switch (type)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		SDL_FreeSurface(surface.sdlSurface);
 		break;
+    #endif
 	}
 }
 
@@ -325,9 +351,11 @@ ElETexture::ElETexture(const ElEGraphicsComponents & renderT)
 	type = renderT;
 	switch (renderT)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		texture.sdlTexture = nullptr;
 		break;
+		#endif
 	}
 }
 
@@ -335,9 +363,11 @@ ElETexture::~ElETexture()
 {
 	switch (type)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		SDL_DestroyTexture(texture.sdlTexture);
 		break;
+		#endif
 	}
 }
 
@@ -346,9 +376,11 @@ ElERender::ElERender(const ElEGraphicsComponents & renderT)
 	type = renderT;
 	switch (renderT)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		render.sdlRender = nullptr;
 		break;
+		#endif
 	}
 }
 
@@ -356,9 +388,11 @@ ElERender::~ElERender()
 {
 	switch (type)
 	{
+	#ifndef RASPBERRY_COMPILE
 	case SDLGraphics:
 		SDL_DestroyRenderer(render.sdlRender);
 		break;
+		#endif
 	}
 }
 

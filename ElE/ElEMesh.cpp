@@ -2,9 +2,7 @@
 #include "ElE.h"
 #include <assert.h>
 
-ElEMesh::ElEMesh() : isTriangleStrip(ElEtrue),
-						vertexShader(nullptr),
-						fragmentShader(nullptr)
+ElEMesh::ElEMesh() : isTriangleStrip(ElEtrue)
 {
 }
 
@@ -47,30 +45,60 @@ ElEMesh::~ElEMesh()
 ElEvoid ElEMesh::draw()
 {
 #ifdef RASPBERRY_COMPILE
+    glUseProgram(material.getProgramID());
+    if(modifiedVertex)
+    {
+        glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
+            vertex.data(), GL_DYNAMIC_DRAW);
+        modifiedVertex = ElEfalse;
+    }
+    if(modifiedIndexes)
+    {
+        glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
+            indexes.data(), GL_STATIC_DRAW);
+        modifiedIndexes = ElEfalse;
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, meshName);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
+    glDrawElements(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
+        vertex.size(),GL_UNSIGNED_BYTE, NULL);
 
 #endif
 }
 
 ElEvoid ElEMesh::initVertexShader(const _IN_ ElEchar * filename)
 {
-	if (vertexShader) return;
-	vertexShader = new ElEShader(ElE::getGraphicsRenderer());
-	vertexShader->LoadVertexShader(filename);
+	material.initVertexShader(filename);
 }
 
 ElEvoid ElEMesh::initFragmentShader(const _IN_ ElEchar * filename)
 {
-	if (fragmentShader) return;
-	fragmentShader = new ElEShader(ElE::getGraphicsRenderer());
-	fragmentShader->LoadFragmentShader(filename);
+    material.initFragmentShader(filename);
 }
 
 ElEvoid ElEMesh::changeVertexShader(const _IN_ ElEchar * filename)
 {
-	return ElEvoid();
+	material.changeVertexShader(filename);
 }
 
 ElEvoid ElEMesh::changeFragmentShader(const _IN_ ElEchar * filename)
 {
-	return ElEvoid();
+	material.changeFragmentShader(filename);
+}
+
+ElEvoid ElEMesh::setup()
+{
+    material.setup();
+    glGenBuffers(1,&meshName);
+    glBindBuffer(GL_ARRAY_BUFFER, meshName);
+    glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
+        vertex.data(), GL_DYNAMIC_DRAW);
+    if(!indexes.size())
+    {
+        glGenBuffers(1, &indexName);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
+        glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
+            indexes.data(), GL_STATIC_DRAW);
+    }
+    modifiedIndexes = modifiedVertex = ElEfalse;
 }

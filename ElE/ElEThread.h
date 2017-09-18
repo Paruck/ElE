@@ -16,29 +16,29 @@ class ElEThread
 private:
 	std::thread*	t;
 	ElEbool			active;
-	void __cdecl TesterFunc(_IN_ std::function<void()> func);
+	void ElEcall TesterFunc(_IN_ std::function<void()> func);
 public:
 	ElEThread();
 	~ElEThread();
 	ElEThread(const _IN_ ElEThread& cpy);
-	void __cdecl StartThread(_IN_ std::function<void()> func);
-	inline ElEbool __cdecl isActive() { return active; }
-	void __cdecl CloseThread();
-	void __cdecl DetachThread();
-	ElEbool __cdecl isJoinable() { return t->joinable() ? ElEtrue : ElEfalse; }
+	void ElEcall StartThread(_IN_ std::function<void()> func);
+	inline ElEbool ElEcall isActive() { return active; }
+	void ElEcall CloseThread();
+	void ElEcall DetachThread();
+	ElEbool ElEcall isJoinable() { return t->joinable() ? ElEtrue : ElEfalse; }
 	ElEThread operator =(const ElEThread& th);
 };
 
 class ElEThreadPool {
 private:
-	ElEVector<ElEThread>*	threadPool = nullptr;
-	ElEuint					threadSize;
-	static ElEThreadPool*	instance;
+    std::vector<ElEThread>*	threadPool = nullptr;
+	ElEuint					    threadSize;
+	static ElEThreadPool*	    instance;
 public:
-	ElEThread* __cdecl RequestThread(_IN_ std::function<void()> func);
-	inline static ElEThreadPool* __cdecl getInstance()
+	ElEThread* ElEcall RequestThread(_IN_ std::function<void()> func);
+	inline static ElEThreadPool* ElEcall getInstance()
 		{ return instance == nullptr ? instance = nullptr : instance; }
-	inline static ElEThreadPool* __cdecl getInstance(const _IN_ ElEuint& thread)
+	inline static ElEThreadPool* ElEcall getInstance(const _IN_ ElEuint& thread)
 		{ return instance == nullptr ? instance = new ElEThreadPool(thread) : instance; }
 	ElEThreadPool() = delete;
 	~ElEThreadPool();

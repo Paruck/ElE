@@ -17,7 +17,6 @@ void ElESceneManager::Draw()
 	while (1) {
 		if (scene && !sceneIsChanging)
 			scene->Draw();
-		this_thread::sleep_for(10ms);
 	}
 }
 
@@ -37,7 +36,7 @@ void ElESceneManager::ChangeScene(_IN_ ElEScene * const & val)
 		scene->Start();
 	}
 	sceneIsChanging = ElEfalse;
-} 
+}
 
 void ElESceneManager::SceneMainLoop()
 {
@@ -45,5 +44,5 @@ void ElESceneManager::SceneMainLoop()
 	using namespace chrono;
 	if(scene)
 		scene->Update();
-	this_thread::sleep_for(16ms);
+	//this_thread::sleep_for(16ms);
 }

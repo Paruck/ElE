@@ -1,12 +1,14 @@
 #pragma once
+#include "ElEDefines.h"
+
 class ElEScene
 {
 public:
 	ElEScene();
 	~ElEScene();
-	virtual void __cdecl Start();
-	virtual void __cdecl Update();
-	virtual void __cdecl Draw();
-	virtual void __cdecl SceneEnd();
+	virtual void ElEcall Start();
+	virtual void ElEcall Update();
+	virtual void ElEcall Draw();
+	virtual void ElEcall SceneEnd();
 };
 

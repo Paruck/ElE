@@ -1,6 +1,5 @@
 #include "ElEScene.h"
-
-
+#include "ElE.h"
 
 ElEScene::ElEScene()
 {
@@ -22,6 +21,14 @@ void ElEScene::Update()
 
 void ElEScene::Draw()
 {
+    switch(ElE::getGraphicsRenderer())
+    {
+    #ifdef RASPBERRY_COMPILE
+        case ElEGraphicsComponents::OpenGLes20Rasp:
+
+            break;
+    #endif // RASPBERRY_COMPILE
+    }
 }
 
 void ElEScene::SceneEnd()

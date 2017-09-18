@@ -10,19 +10,19 @@ class ElESceneManager
 {
 public:
 	~ElESceneManager();
-	inline static ElESceneManager* __cdecl getInstance()
+	inline static ElESceneManager* ElEcall getInstance()
 	{
 		return instance == nullptr ? instance = new ElESceneManager() : instance;
 	}
-	void __cdecl ChangeScene(_IN_ ElEScene* const& val);
+	void ElEcall ChangeScene(_IN_ ElEScene* const& val);
 	inline const ElEScene* getScene() { return scene; }
-	void __cdecl SceneMainLoop();
+	void ElEcall SceneMainLoop();
 private:
 	static ElESceneManager*				instance;
 	ElEbool								sceneIsChanging = ElEfalse;
 	std::mutex							drawMutex;
 	ElEScene*							scene = nullptr;
 	ElESceneManager();
-	void __cdecl Draw();
+	void ElEcall Draw();
 };
 

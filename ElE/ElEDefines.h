@@ -2,8 +2,16 @@
 #define _IN_
 #define _OUT_
 #define _IN_OUT_
-#define WIN32_COMPILE
+//#define WIN32_COMPILE
 //#define RASPBERRY_COMPILE
+
+
+
+#ifdef RASPBERRY_COMPILE
+#define ElEcall
+#else
+#define ElEcall __cdecl
+#endif
 
 typedef enum ElEBoolean
 {
@@ -43,6 +51,10 @@ const ElEint	threadAmmount = 4;
 const ElEfloat	PI = 3.1415f;
 const ElEfloat	degtorad = PI / 180.f;
 
+typedef struct ElEPosHelper
+{
+    ElEint x, y;
+}ElEPosHelper;
 
 typedef struct ElERect {
 	ElEint x, y;
@@ -123,6 +135,68 @@ typedef enum ElEShaderTypes {
 	computeShader,
 	fragmentShader
 }ElEShaderTypes;
+
+typedef enum ElEKey{
+    kb_A = 0,
+    kb_B,
+    kb_C,
+    kb_D,
+    kb_E,
+    kb_F,
+    kb_G,
+    kb_H,
+    kb_I,
+    kb_J,
+    kb_K,
+    kb_L,
+    kb_M,
+    kb_N,
+    kb_O,
+    kb_P,
+    kb_Q,
+    kb_R,
+    kb_S,
+    kb_T,
+    kb_U,
+    kb_V,
+    kb_W,
+    kb_X,
+    kb_Y,
+    kb_Z,
+    kb_return,
+    kb_lshift,
+    kb_rshift,
+    kb_lctrl,
+    kb_rctrl,
+    kb_lalt,
+    kb_ralt,
+    kb_1,
+    kb_2,
+    kb_3,
+    kb_4,
+    kb_5,
+    kb_6,
+    kb_7,
+    kb_8,
+    kb_9,
+    kb_0,
+    kb_tab,
+    kb_mayus,
+    kb_esc,
+    numpad_1,
+    numpad_2,
+    numpad_3,
+    numpad_4,
+    numpad_5,
+    numpad_6,
+    numpad_7,
+    numpad_8,
+    numpad_9,
+    numpad_0,
+    mb_left,
+    mb_right,
+    mb_middle
+}ElEKey;
 
 typedef union MotorFlags
 {

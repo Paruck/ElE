@@ -1,7 +1,7 @@
 #pragma once
 #include "ElEDefines.h"
 #include "ElEVector.h"
-#include "ElEShader.h"
+#include "ElEMaterial.h"
 
 #ifdef RASPBERRY_COMPILE
 #include "GLES2/gl2.h"
@@ -19,24 +19,30 @@ public:
 		const _IN_ ElEsize_t & indexSize = 0);
 	ElEMesh(const _IN_ ElEVertex& verts, _IN_ ElEIndexes* const& indexarr = nullptr);
 	~ElEMesh();
-	ElEvoid __cdecl draw();
-	inline ElEVertex __cdecl getVertex() const { return vertex; }
-	inline ElEIndexes __cdecl getIndexes() const { return indexes; }
-	inline ElEvoid __cdecl	setVertex(const _IN_ ElEVertex& verts) { vertex = verts; }
-	inline ElEvoid __cdecl setIndexes(_IN_ ElEIndexes* const& indexarr)
-	{ indexes = *indexarr; }
-	inline ElEvoid __cdecl useTriangleStrip(const _IN_ ElEbool& val)
+	ElEvoid ElEcall draw();
+	inline ElEVertex ElEcall getVertex() const { return vertex; }
+	inline ElEIndexes ElEcall getIndexes() const { return indexes; }
+	inline ElEvoid ElEcall	setVertex(const _IN_ ElEVertex& verts)
+	{ modifiedVertex = ElEtrue; vertex = verts; }
+	inline ElEvoid ElEcall setIndexes(_IN_ ElEIndexes* const& indexarr)
+	{ modifiedIndexes = ElEtrue; indexes = *indexarr; }
+	inline ElEvoid ElEcall useTriangleStrip(const _IN_ ElEbool& val)
 	{ isTriangleStrip = val; }
-	inline ElEbool __cdecl usingTriangleStrip() { return isTriangleStrip; }
-	ElEvoid __cdecl initVertexShader(const _IN_ ElEchar* filename);
-	ElEvoid __cdecl initFragmentShader(const _IN_ ElEchar* filename);
-	ElEvoid __cdecl changeVertexShader(const _IN_ ElEchar* filename);
-	ElEvoid __cdecl changeFragmentShader(const _IN_ ElEchar* filename);
+	inline ElEbool ElEcall usingTriangleStrip() { return isTriangleStrip; }
+	ElEvoid ElEcall initVertexShader(const _IN_ ElEchar* filename);
+	ElEvoid ElEcall initFragmentShader(const _IN_ ElEchar* filename);
+	ElEvoid ElEcall changeVertexShader(const _IN_ ElEchar* filename);
+	ElEvoid ElEcall changeFragmentShader(const _IN_ ElEchar* filename);
+	ElEvoid ElEcall setup();
 private:
 	ElEVertex	vertex;
 	ElEIndexes	indexes;
-	ElEbool		isTriangleStrip;
-	ElEShader	*vertexShader,
-				*fragmentShader;
+	ElEbool		isTriangleStrip,
+                modifiedVertex,
+                modifiedIndexes;
+	ElEMaterial material;
+	ElEuint     meshName,
+                indexName;
+
 };
 
