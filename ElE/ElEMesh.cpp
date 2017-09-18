@@ -46,23 +46,32 @@ ElEvoid ElEMesh::draw()
 {
 #ifdef RASPBERRY_COMPILE
     glUseProgram(material.getProgramID());
-    if(modifiedVertex)
+    /*if(modifiedVertex)
     {
         glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
-            vertex.data(), GL_DYNAMIC_DRAW);
+            &vertex.front(), GL_DYNAMIC_DRAW);
         modifiedVertex = ElEfalse;
     }
     if(modifiedIndexes)
     {
         glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
-            indexes.data(), GL_STATIC_DRAW);
+            &indexes.front(), GL_STATIC_DRAW);
         modifiedIndexes = ElEfalse;
-    }
+    } */
     glBindBuffer(GL_ARRAY_BUFFER, meshName);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
-    glDrawElements(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
-        vertex.size(),GL_UNSIGNED_BYTE, NULL);
-
+    glBufferData(GL_ARRAY_BUFFER, sizeof(ElEfloat)*vertex.size(),
+        &vertex.front(), GL_DYNAMIC_DRAW);
+    if(indexes.size() > 0)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ElEubyte)*indexes.size(),
+            &indexes.front(), GL_STATIC_DRAW);
+        glDrawElements(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
+            vertex.size(),GL_UNSIGNED_BYTE, NULL);
+    }
+    else
+        glDrawArrays(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
+            0,vertex.size());
 #endif
 }
 
@@ -91,14 +100,14 @@ ElEvoid ElEMesh::setup()
     material.setup();
     glGenBuffers(1,&meshName);
     glBindBuffer(GL_ARRAY_BUFFER, meshName);
-    glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
-        vertex.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(ElEfloat)*vertex.size(),
+        &vertex.front(), GL_DYNAMIC_DRAW);
     if(!indexes.size())
     {
         glGenBuffers(1, &indexName);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
-        glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
-            indexes.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ElEubyte)*indexes.size(),
+            &indexes.front(), GL_STATIC_DRAW);
     }
     modifiedIndexes = modifiedVertex = ElEfalse;
 }

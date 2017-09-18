@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ElE" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/ElE" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/ElE" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-O3" />
+			<Add option="-Wshadow" />
+			<Add option="-Winit-self" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wundef" />
+			<Add option="-Winline" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-declarations" />
+			<Add option="-Wmissing-include-dirs" />
+			<Add option="-Wswitch-enum" />
+			<Add option="-Wswitch-default" />
+			<Add option="-Wzero-as-null-pointer-constant" />
+			<Add option="-std=c++11" />
+			<Add option="-Wall" />
+			<Add option="-DRASPBERRY_COMPILE" />
+			<Add directory="../../../../opt/vc/include" />
+			<Add directory="../../../../opt/vc/include/interface/vcos/pthreads" />
+			<Add directory="../../../../opt/vc/include/interface/vmcs_host/linux" />
+		</Compiler>
+		<Linker>
+			<Add option="-L/opt/vc/lib -lEGL -lGLESv2 -lbcm_host -lvcos -lvchiq_arm -lpthread -lrt" />
+		</Linker>
+		<Unit filename="ElE.cpp" />
+		<Unit filename="ElE.h" />
+		<Unit filename="ElEDefines.h" />
+		<Unit filename="ElEInput.cpp" />
+		<Unit filename="ElEInput.h" />
+		<Unit filename="ElEMainScene.cpp" />
+		<Unit filename="ElEMainScene.h" />
+		<Unit filename="ElEMaterial.cpp" />
+		<Unit filename="ElEMaterial.h" />
+		<Unit filename="ElEMatrix3x3.cpp" />
+		<Unit filename="ElEMatrix3x3.h" />
+		<Unit filename="ElEMesh.cpp" />
+		<Unit filename="ElEMesh.h" />
+		<Unit filename="ElENode.h" />
+		<Unit filename="ElEQueue.h" />
+		<Unit filename="ElEScene.cpp" />
+		<Unit filename="ElEScene.h" />
+		<Unit filename="ElESceneManager.cpp" />
+		<Unit filename="ElESceneManager.h" />
+		<Unit filename="ElEShader.cpp" />
+		<Unit filename="ElEShader.h" />
+		<Unit filename="ElEThread.cpp" />
+		<Unit filename="ElEThread.h" />
+		<Unit filename="ElEVector.h" />
+		<Unit filename="ElEVector2f.cpp" />
+		<Unit filename="ElEVector2f.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

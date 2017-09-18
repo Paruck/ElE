@@ -73,9 +73,9 @@ ElEvoid ElEMainScene::Start()
     mesha.setVertex(verts1);
 
     ElEIndexes index1;
-    for(ElEint i = 0; i < verts1.size(); ++i)
+    /*for(ElEint i = 0; i < verts1.size(); ++i)
         index1.push_back(i);
-    mesha.setIndexes(&index1);
+    mesha.setIndexes(&index1);*/
     mesha.useTriangleStrip(ElEfalse);
     mesha.setup();
 
@@ -90,7 +90,11 @@ ElEvoid ElEMainScene::Update()
 
 ElEvoid ElEMainScene::Draw()
 {
+    glViewport(0, 0, ElE::getWidth(), ElE::getHeight());
+    glClear(GL_COLOR_BUFFER_BIT);
     mesha.draw();
+    eglSwapBuffers(ElE::getRender()->render.eglRender,ElE::getSurface()->surface.eglSurface);
+    glFlush();
 }
 
 ElEvoid ElEMainScene::SceneEnd()

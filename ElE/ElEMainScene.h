@@ -4,6 +4,9 @@
 #include "ElEShader.h"
 #ifdef WIN32_COMPILE
 #include "include\SDL\SDL.h"
+#else#include "GLES2/gl2.h"
+#include "EGL/egl.h"
+#include "EGL/eglext.h"
 #endif
 #include "ElE.h"
 #include "ElEVector2f.h"

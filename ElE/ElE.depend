@@ -1,0 +1,524 @@
+# depslib dependency file v1.0
+1505693707 source:/home/pi/ElE/ElE/ElE.cpp
+	"ElE.h"
+	"ElEMainScene.h"
+
+1505678402 /home/pi/ElE/ElE/ElE.h
+	"ElEVector.h"
+	"ElEDefines.h"
+	"ElEThread.h"
+	"ElESceneManager.h"
+	<SDL\SDL.h>
+	<SFML\Main.hpp>
+	<SFML\Window.hpp>
+	<SFML\System.hpp>
+	<SFML\Graphics.hpp>
+	<SFML\OpenGL.hpp>
+	<SDL\SDL_ttf.h>
+	<SDL\SDL_mixer.h>
+	<SDL\SDL_image.h>
+	<unistd.h>
+	<fcntl.h>
+	<stdlib.h>
+	<assert.h>
+	<stdio.h>
+	"GLES2/gl2.h"
+	"EGL/egl.h"
+	"EGL/eglext.h"
+	"bcm_host.h"
+	<functional>
+	<string.h>
+	<math.h>
+	<thread>
+	<mutex>
+	<chrono>
+	<iostream>
+	<vector>
+
+1505018130 /home/pi/ElE/ElE/ElEVector.h
+	<assert.h>
+	<vector>
+	"ElEDefines.h"
+
+1505687156 /home/pi/ElE/ElE/ElEDefines.h
+	<inttypes.h>
+	<cstdint>
+
+1505018641 /home/pi/ElE/ElE/ElEThread.h
+	"ElEDefines.h"
+	"ElEVector.h"
+	<thread>
+	<functional>
+	<Windows.h>
+	<pthread.h>
+
+1505018130 /home/pi/ElE/ElE/ElESceneManager.h
+	"ElEDefines.h"
+	"ElEScene.h"
+	"ElEThread.h"
+	"ElEQueue.h"
+	<mutex>
+	<functional>
+
+1505675623 /home/pi/ElE/ElE/ElEScene.h
+	"ElEDefines.h"
+
+1505018131 /home/pi/ElE/ElE/ElEQueue.h
+	"ElENode.h"
+	"ElEDefines.h"
+
+1505009819 /home/pi/ElE/ElE/ElENode.h
+	"ElEDefines.h"
+
+1440173077 /opt/vc/include/GLES2/gl2.h
+	"gl2platform.h"
+
+1440173077 /opt/vc/include/GLES2/gl2platform.h
+	"../KHR/khrplatform.h"
+
+1443020734 /opt/vc/include/KHR/khrplatform.h
+	<stdint.h>
+	<inttypes.h>
+	<vcinclude/common.h>
+	<stdint.h>
+
+1440173077 /opt/vc/include/vcinclude/common.h
+	"interface/vcos/vcos_stdint.h"
+	"interface/vctypes/vc_image_types.h"
+	<vc/intrinsics.h>
+	<limits.h>
+	<limits.h>
+
+1440173077 /opt/vc/include/interface/vcos/vcos_stdint.h
+	<limits.h>
+	<stdint.h>
+
+1499076441 /opt/vc/include/interface/vctypes/vc_image_types.h
+	"interface/vcos/vcos_stdint.h"
+
+1440173077 /opt/vc/include/EGL/egl.h
+	"eglplatform.h"
+
+1440173077 /opt/vc/include/EGL/eglplatform.h
+	"../KHR/khrplatform.h"
+	"begl_memplatform.h"
+	"begl_hwplatform.h"
+	"begl_dispplatform.h"
+	<X headers>
+	"interface/vmcs_host/vc_dispmanx.h"
+	"interface/khronos/common/khrn_client_mangle.h"
+
+1440173077 /opt/vc/include/interface/vmcs_host/vc_dispmanx.h
+	"interface/vcos/vcos.h"
+	"interface/vctypes/vc_image_types.h"
+	"vc_dispservice_x_defs.h"
+	"interface/vmcs_host/vc_dispmanx_types.h"
+	"interface/vchi/vchi.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos.h
+	"interface/vcos/vcos_assert.h"
+	"vcos_types.h"
+	"interface/vcos/pthreads/vcos_platform.h"
+	"vcos_platform.h"
+	"interface/vcos/vcos_init.h"
+	"interface/vcos/vcos_semaphore.h"
+	"interface/vcos/vcos_thread.h"
+	"interface/vcos/vcos_mutex.h"
+	"interface/vcos/vcos_mem.h"
+	"interface/vcos/vcos_logging.h"
+	"interface/vcos/vcos_string.h"
+	"interface/vcos/vcos_event.h"
+	"interface/vcos/vcos_thread_attr.h"
+	"interface/vcos/vcos_tls.h"
+	"interface/vcos/vcos_reentrant_mutex.h"
+	"interface/vcos/vcos_named_semaphore.h"
+	"interface/vcos/vcos_quickslow_mutex.h"
+	"interface/vcos/vcos_event_flags.h"
+	"interface/vcos/vcos_queue.h"
+	"interface/vcos/vcos_legacy_isr.h"
+	"interface/vcos/vcos_timer.h"
+	"interface/vcos/vcos_mempool.h"
+	"interface/vcos/vcos_isr.h"
+	"interface/vcos/vcos_atomic_flags.h"
+	"interface/vcos/vcos_once.h"
+	"interface/vcos/vcos_blockpool.h"
+	"interface/vcos/vcos_file.h"
+	"interface/vcos/vcos_cfg.h"
+	"interface/vcos/vcos_cmd.h"
+
+1447862501 /opt/vc/include/interface/vcos/vcos_assert.h
+	"interface/vcos/vcos_types.h"
+	"interface/vcos/user_nodefs.h"
+	"assert.h"
+
+1477309317 /opt/vc/include/interface/vcos/vcos_types.h
+	<stddef.h>
+	"interface/vcos/pthreads/vcos_platform_types.h"
+	"vcos_platform_types.h"
+	"interface/vcos/vcos_attr.h"
+
+1440173077 /opt/vc/include/interface/vcos/pthreads/vcos_platform_types.h
+	"interface/vcos/vcos_inttypes.h"
+
+1440173077 /opt/vc/include/interface/vcos/vcos_inttypes.h
+	<inttypes.h>
+
+1440173077 /opt/vc/include/interface/vcos/vcos_attr.h
+
+1440173077 /opt/vc/include/interface/vcos/user_nodefs.h
+
+1477309317 /opt/vc/include/interface/vcos/pthreads/vcos_platform.h
+	<pthread.h>
+	<semaphore.h>
+	<unistd.h>
+	<sys/types.h>
+	<sched.h>
+	<errno.h>
+	<unistd.h>
+	<string.h>
+	<strings.h>
+	<time.h>
+	<signal.h>
+	<stddef.h>
+	<stdlib.h>
+	<dlfcn.h>
+	"vcos_futex_mutex.h"
+	"interface/vcos/generic/vcos_generic_event_flags.h"
+	"interface/vcos/generic/vcos_generic_blockpool.h"
+	"interface/vcos/generic/vcos_mem_from_malloc.h"
+	"interface/vcos/generic/vcos_generic_reentrant_mtx.h"
+	"interface/vcos/generic/vcos_generic_named_sem.h"
+	"interface/vcos/generic/vcos_generic_quickslow_mutex.h"
+	"interface/vcos/generic/vcos_common.h"
+
+1440173077 /opt/vc/include/interface/vcos/pthreads/vcos_futex_mutex.h
+	"interface/vcos/vcos_types.h"
+	"vcos_platform.h"
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_generic_event_flags.h
+	"interface/vcos/vcos_types.h"
+
+1455024753 /opt/vc/include/interface/vcos/generic/vcos_generic_blockpool.h
+	"interface/vcos/vcos_types.h"
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_mem_from_malloc.h
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_generic_reentrant_mtx.h
+	"interface/vcos/vcos_types.h"
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_generic_named_sem.h
+	"interface/vcos/vcos_types.h"
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_generic_quickslow_mutex.h
+	"interface/vcos/vcos_types.h"
+
+1440173077 /opt/vc/include/interface/vcos/generic/vcos_common.h
+
+1466579165 /opt/vc/include/interface/vcos/vcos_init.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_semaphore.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_thread.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_mutex.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_mem.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_logging.h
+	<stdarg.h>
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+	"vcos_logging_control.h"
+	"interface/vcos/vcos_cmd.h"
+
+1440173077 /opt/vc/include/interface/vcos/vcos_logging_control.h
+
+1466579165 /opt/vc/include/interface/vcos/vcos_cmd.h
+	"interface/vcos/vcos.h"
+	"interface/vcos/vcos_stdint.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_string.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+	<linux/string.h>
+	<string.h>
+
+1466579165 /opt/vc/include/interface/vcos/vcos_event.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1440173077 /opt/vc/include/interface/vcos/vcos_thread_attr.h
+
+1466579165 /opt/vc/include/interface/vcos/vcos_tls.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_reentrant_mutex.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_named_semaphore.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_quickslow_mutex.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_event_flags.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_queue.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_legacy_isr.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_timer.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_mempool.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_isr.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_atomic_flags.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_once.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_blockpool.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1466579165 /opt/vc/include/interface/vcos/vcos_cfg.h
+	"interface/vcos/vcos_types.h"
+	"vcos.h"
+
+1440173077 /opt/vc/include/interface/vmcs_host/vc_dispservice_x_defs.h
+	"interface/vctypes/vc_image_types.h"
+
+1455024753 /opt/vc/include/interface/vmcs_host/vc_dispmanx_types.h
+	"interface/vctypes/vc_image_types.h"
+	"interface/vctypes/vc_display_types.h"
+
+1443020722 /opt/vc/include/interface/vctypes/vc_display_types.h
+
+1455024753 /opt/vc/include/interface/vchi/vchi.h
+	"interface/vcos/vcos.h"
+	"interface/vchi/vchi_cfg.h"
+	"interface/vchi/vchi_common.h"
+	"interface/vchi/connections/connection.h"
+	"vchi_mh.h"
+
+1440173077 /opt/vc/include/interface/vchi/vchi_cfg.h
+
+1440173077 /opt/vc/include/interface/vchi/vchi_common.h
+
+1440173077 /opt/vc/include/interface/vchi/connections/connection.h
+	"interface/vchi/vchi_cfg_internal.h"
+	"interface/vchi/vchi_common.h"
+	"interface/vchi/message_drivers/message.h"
+
+1440173077 /opt/vc/include/interface/vchi/vchi_cfg_internal.h
+
+1440173077 /opt/vc/include/interface/vchi/message_drivers/message.h
+	"interface/vchi/vchi_cfg_internal.h"
+	"interface/vcos/vcos.h"
+	"interface/vchi/vchi_common.h"
+
+1440173077 /opt/vc/include/interface/vchi/vchi_mh.h
+	<interface/vcos/vcos.h>
+
+1440173077 /opt/vc/include/EGL/eglext.h
+	"eglplatform.h"
+	"eglext_brcm.h"
+	"eglext_android.h"
+	"eglext_nvidia.h"
+
+1480091708 /opt/vc/include/EGL/eglext_brcm.h
+
+1440173077 /opt/vc/include/EGL/eglext_android.h
+	<system/window.h>
+
+1440173077 /opt/vc/include/EGL/eglext_nvidia.h
+
+1440173077 /opt/vc/include/bcm_host.h
+	<stdint.h>
+	"interface/vmcs_host/vc_dispmanx.h"
+	"interface/vmcs_host/vc_tvservice.h"
+	"interface/vmcs_host/vc_cec.h"
+	"interface/vmcs_host/vc_cecservice.h"
+	"interface/vmcs_host/vcgencmd.h"
+
+1462370941 /opt/vc/include/interface/vmcs_host/vc_tvservice.h
+	"vcinclude/common.h"
+	"interface/vcos/vcos.h"
+	"interface/vchi/vchi.h"
+	"interface/vmcs_host/vc_tvservice_defs.h"
+	"interface/vmcs_host/vc_hdmi.h"
+	"interface/vmcs_host/vc_sdtv.h"
+
+1447862501 /opt/vc/include/interface/vmcs_host/vc_tvservice_defs.h
+	"vcinclude/common.h"
+	"interface/vchi/message_drivers/message.h"
+	"vc_hdmi.h"
+	"vc_sdtv.h"
+
+1455024753 /opt/vc/include/interface/vmcs_host/vc_hdmi.h
+	"vc_hdmi_property.h"
+
+1443020722 /opt/vc/include/interface/vmcs_host/vc_hdmi_property.h
+	"vcinclude/common.h"
+
+1488551421 /opt/vc/include/interface/vmcs_host/vc_sdtv.h
+
+1488551421 /opt/vc/include/interface/vmcs_host/vc_cec.h
+
+1488551421 /opt/vc/include/interface/vmcs_host/vc_cecservice.h
+	"vcinclude/common.h"
+	"interface/vcos/vcos.h"
+	"interface/vchi/vchi.h"
+	"interface/vmcs_host/vc_cecservice_defs.h"
+	"interface/vmcs_host/vc_cec.h"
+
+1440173077 /opt/vc/include/interface/vmcs_host/vc_cecservice_defs.h
+	"vcinclude/common.h"
+	"interface/vcos/vcos.h"
+	"interface/vcos/vcos_logging.h"
+	"interface/vchi/message_drivers/message.h"
+
+1466579165 /opt/vc/include/interface/vmcs_host/vcgencmd.h
+	"vchost_platform_config.h"
+	"interface/vchi/vchi.h"
+
+1466579165 /opt/vc/include/interface/vmcs_host/vchost_platform_config.h
+	"linux/vchost_config.h"
+	"vchost_config.h"
+
+1440173077 /opt/vc/include/interface/vmcs_host/linux/vchost_config.h
+	"interface/vcos/vcos.h"
+
+1505700024 /home/pi/ElE/ElE/ElEMainScene.h
+	"ElEScene.h"
+	"ElEDefines.h"
+	"ElEShader.h"
+	"include\SDL\SDL.h"
+	"EGL/egl.h"
+	"EGL/eglext.h"
+	"ElE.h"
+	"ElEVector2f.h"
+	"ElEMesh.h"
+	<vector>
+
+1505325337 /home/pi/ElE/ElE/ElEShader.h
+	"ElEDefines.h"
+	"GLES2/gl2.h"
+	"EGL/egl.h"
+	"EGL/eglext.h"
+	<stdlib.h>
+	<assert.h>
+	<stdio.h>
+	<unistd.h>
+
+1505009819 /home/pi/ElE/ElE/ElEVector2f.h
+	"ElEDefines.h"
+
+1505704110 source:/home/pi/ElE/ElE/ElEMainScene.cpp
+	"ElEMainScene.h"
+	"ElE.h"
+	"ElEMatrix3x3.h"
+	"ElEInput.h"
+
+1505009819 /home/pi/ElE/ElE/ElEMatrix3x3.h
+	"ElEDefines.h"
+
+1505009819 source:/home/pi/ElE/ElE/ElEMatrix3x3.cpp
+	"ElEMatrix3x3.h"
+	"ElEVector2f.h"
+	<cmath>
+
+1505705981 source:/home/pi/ElE/ElE/ElEMesh.cpp
+	"ElEMesh.h"
+	"ElE.h"
+	<assert.h>
+
+1505670428 /home/pi/ElE/ElE/ElEMesh.h
+	"ElEDefines.h"
+	"ElEVector.h"
+	"ElEMaterial.h"
+	"GLES2/gl2.h"
+	"EGL/egl.h"
+	"EGL/eglext.h"
+
+1505675817 source:/home/pi/ElE/ElE/ElEScene.cpp
+	"ElEScene.h"
+	"ElE.h"
+
+1505325034 source:/home/pi/ElE/ElE/ElESceneManager.cpp
+	"ElESceneManager.h"
+	<chrono>
+
+1505663694 source:/home/pi/ElE/ElE/ElEShader.cpp
+	"ElEShader.h"
+
+1505327406 source:/home/pi/ElE/ElE/ElEThread.cpp
+	"ElEThread.h"
+
+1505009819 source:/home/pi/ElE/ElE/ElEVector2f.cpp
+	"ElEVector2f.h"
+
+1505603528 source:/home/pi/ElE/ElE/main.cpp
+	<SDL\SDL.h>
+	"ElE.h"
+	"ElEDefines.h"
+
+1505597404 source:/home/pi/ElE/ElE/src/ElEMaterial.cpp
+	"ElEMaterial.h"
+
+1505598157 /home/pi/ElE/ElE/include/ElEMaterial.h
+
+1505672183 /home/pi/ElE/ElE/ElEMaterial.h
+	"ElEDefines.h"
+	"ElEShader.h"
+	"GLES2/gl2.h"
+	"EGL/egl.h"
+	"EGL/eglext.h"
+
+1505696096 source:/home/pi/ElE/ElE/ElEMaterial.cpp
+	"ElEMaterial.h"
+	"ElE.h"
+
+1505693500 source:/home/pi/ElE/ElE/ElEInput.cpp
+	"ElEInput.h"
+
+1505691817 /home/pi/ElE/ElE/ElEInput.h
+	"ElEDefines.h"
+	<stdio.h>
+	<unistd.h>
+	<errno.h>
+	<regex.h>
+	<dirent.h>
+	<fcntl.h>
+	<linux/input.h>
+
