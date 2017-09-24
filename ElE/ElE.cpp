@@ -17,6 +17,9 @@ ElEchar*								ElE::windowTitle;
 ElEGLContext*                           ElE::context;
 #ifndef RASPBERRY_COMPILE
 SDL_Event								ElE::event;
+#else
+EGLStuff                                ElE::stuff;
+GLMeshIDManager                         ElE::mngr;
 #endif
 void ElE::App(
 	const _IN_ ElEGraphicsComponents & graph,
@@ -156,16 +159,8 @@ void ElE::InitOpenGLes20Rasp()
 {
 #ifdef RASPBERRY_COMPILE
 	bcm_host_init();
-
-	static EGL_DISPMANX_WINDOW_T 	nativeWindow;
-	DISPMANX_ELEMENT_HANDLE_T	    dispman_element;
-	DISPMANX_DISPLAY_HANDLE_T	    dispman_display;
-	DISPMANX_UPDATE_HANDLE_T	    dispman_update;
 	EGLBoolean                      result;
-	ElEint				            success = 0;
-	ElEint 				            num_config;
-	VC_RECT_T dst_rect;
-	VC_RECT_T src_rect;
+
 	static const EGLint attribute_list[] =
 	{
 		EGL_RED_SIZE, 		8,
@@ -190,7 +185,7 @@ void ElE::InitOpenGLes20Rasp()
 	result = eglInitialize(render->render.eglRender, NULL, NULL);
 	assert(result != EGL_FALSE);
 
-    result = eglChooseConfig(render->render.eglRender, attribute_list, &config, 1, &num_config);
+    result = eglChooseConfig(render->render.eglRender, attribute_list, &config, 1, &stuff.num_config);
 	assert(result != EGL_FALSE);
 
 	result = eglBindAPI(EGL_OPENGL_ES_API);
@@ -200,34 +195,34 @@ void ElE::InitOpenGLes20Rasp()
         EGL_NO_CONTEXT, context_attributes);
 	assert(context != EGL_NO_CONTEXT);
 
-	success = graphics_get_display_size(0, &screenWidth, &screenHeight);
-	assert(success >= 0);
+	stuff.success = graphics_get_display_size(0, &screenWidth, &screenHeight);
+	assert(stuff.success >= 0);
 
-	dst_rect.x = 0;
-	dst_rect.y = 0;
-	dst_rect.width = screenWidth;
-	dst_rect.height = screenHeight;
+	stuff.dst_rect.x = 0;
+	stuff.dst_rect.y = 0;
+	stuff.dst_rect.width = screenWidth;
+	stuff.dst_rect.height = screenHeight;
 
-	src_rect.x = 0;
-	src_rect.y = 0;
-	src_rect.width = screenWidth << 16;
-	src_rect.height = screenHeight << 16;
+	stuff.src_rect.x = 0;
+	stuff.src_rect.y = 0;
+	stuff.src_rect.width = screenWidth << 16;
+	stuff.src_rect.height = screenHeight << 16;
 
-	dispman_display = vc_dispmanx_display_open(0);
-	dispman_update = vc_dispmanx_update_start(0);
+	stuff.dispman_display = vc_dispmanx_display_open(0);
+	stuff.dispman_update = vc_dispmanx_update_start(0);
 
-	dispman_element = vc_dispmanx_element_add(
-		dispman_update, dispman_display, 0,
-		&dst_rect, 0, &src_rect,
+	stuff.dispman_element = vc_dispmanx_element_add(
+		stuff.dispman_update, stuff.dispman_display, 0,
+		&stuff.dst_rect, 0, &stuff.src_rect,
 		DISPMANX_PROTECTION_NONE, 0, 0,
 		(DISPMANX_TRANSFORM_T)0);
 
-	nativeWindow.element = dispman_element;
-	nativeWindow.width = screenWidth;
-	nativeWindow.height = screenHeight;
-	vc_dispmanx_update_submit_sync(dispman_update);
+	stuff.nativeWindow.element = stuff.dispman_element;
+	stuff.nativeWindow.width = screenWidth;
+	stuff.nativeWindow.height = screenHeight;
+	vc_dispmanx_update_submit_sync(stuff.dispman_update);
 
-	window->window.eglWindow = &nativeWindow;
+	window->window.eglWindow = &stuff.nativeWindow;
 	surface->surface.eglSurface = eglCreateWindowSurface(render->render.eglRender, config,
 		window->window.eglWindow, NULL);
 	assert(surface->surface.eglSurface != EGL_NO_SURFACE);
@@ -409,3 +404,27 @@ ElEGLContext::~ElEGLContext()
 	}
 }
 
+GLMeshIDManager::GLMeshIDManager()
+{
+    data = new struct Sdata[GL_MAX_VERTEX_ATTRIBS-1];
+    for(ElEuint i = GL_MAX_VERTEX_ATTRIBS; i--;)
+        data[i].id = i;
+}
+
+ElEuint GLMeshIDManager::getUnusedID()
+{
+    for(ElEuint i = GL_MAX_VERTEX_ATTRIBS; i--;)
+    {
+        if(!data[i].inUse)
+        {
+            data[i].inUse = ElEtrue;
+            return data[i].id;
+        }
+    }
+    return -1;
+}
+
+ElEvoid GLMeshIDManager::cleanUsedID(ElEuint idTag)
+{
+    data[idTag].inUse = ElEfalse;
+}

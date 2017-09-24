@@ -30,7 +30,7 @@ class ElEMaterial
         ElEvoid ElEcall changeFragmentShader(const _IN_ ElEchar* filename);
         inline ElEuint ElEcall getProgramID(){ return programid; }
         inline ElEuint ElEcall getTextureiD(){ return textureid; }
-        ElEvoid ElEcall setup();
+        ElEvoid ElEcall setup(const ElEuint& slot);
         ElEvoid ElEcall setTexture(_IN_ ElEvoid* const& data,
                 const ElEint& target,
                 const ElEint& mipmapLevel,
@@ -38,9 +38,12 @@ class ElEMaterial
                 const ElEsize_t& width,
                 const ElEsize_t& height,
                 const ElEint& texelDataType);
+        inline ElEvoid ElEcall setAttribFunction(ElEvoid (*f)(const ElEuint&, const ElEuint&))
+        { shaderAttribFunction = f; }
     private:
-        ElEShader	*vertexShader,
-                    *fragmentShader;
-        ElEuint     programid,
-                    textureid;
+        ElEShader	        *vertexShader,
+                            *fragmentShader;
+        ElEuint             programid,
+                            textureid;
+        ElEvoid             (*shaderAttribFunction)(const ElEuint&, const ElEuint&);
 };

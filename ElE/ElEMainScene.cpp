@@ -8,6 +8,10 @@ ElEMainScene::ElEMainScene()
 
 }
 
+ElEvoid shaderf(const ElEuint& programObject, const ElEuint& slot)
+{
+    glBindAttribLocation(programObject, slot, "vPosition");
+}
 
 ElEMainScene::~ElEMainScene()
 {
@@ -17,6 +21,7 @@ ElEMainScene::~ElEMainScene()
 ElEvoid ElEMainScene::Start()
 {
     ElEVertex verts1;
+
     verts1.push_back(0); verts1.push_back(1); verts1.push_back(0); verts1.push_back(1); // 1
     verts1.push_back(0); verts1.push_back(0); verts1.push_back(0); verts1.push_back(1); // 2
     verts1.push_back(1); verts1.push_back(0); verts1.push_back(0); verts1.push_back(1); // 3
@@ -69,14 +74,15 @@ ElEvoid ElEMainScene::Start()
     verts1.push_back(0); verts1.push_back(0); verts1.push_back(1); verts1.push_back(1);
     verts1.push_back(1); verts1.push_back(1); verts1.push_back(1); verts1.push_back(1);
     verts1.push_back(1); verts1.push_back(0); verts1.push_back(1); verts1.push_back(1);
-    /////////////////////////////////6
+    /////////////////////////////////6 */
     mesha.setVertex(verts1);
 
     ElEIndexes index1;
-    /*for(ElEint i = 0; i < verts1.size(); ++i)
+   /*for(ElEint i = 0; i < verts1.size(); ++i)
         index1.push_back(i);
     mesha.setIndexes(&index1);*/
     mesha.useTriangleStrip(ElEfalse);
+    mesha.getMaterial().setAttribFunction(shaderf);
     mesha.setup();
 
 }

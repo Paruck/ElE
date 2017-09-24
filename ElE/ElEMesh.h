@@ -29,6 +29,7 @@ public:
 	inline ElEvoid ElEcall useTriangleStrip(const _IN_ ElEbool& val)
 	{ isTriangleStrip = val; }
 	inline ElEbool ElEcall usingTriangleStrip() { return isTriangleStrip; }
+	inline ElEMaterial& getMaterial(){ return material; }
 	ElEvoid ElEcall initVertexShader(const _IN_ ElEchar* filename);
 	ElEvoid ElEcall initFragmentShader(const _IN_ ElEchar* filename);
 	ElEvoid ElEcall changeVertexShader(const _IN_ ElEchar* filename);

@@ -6,18 +6,18 @@ ElESceneManager* ElESceneManager::instance = nullptr;
 
 ElESceneManager::ElESceneManager()
 {
-	ElEThreadPool::getInstance()->RequestThread(
-		std::bind(&ElESceneManager::Draw, this))->DetachThread();
+	//ElEThreadPool::getInstance()->RequestThread(
+		//std::bind(&ElESceneManager::Draw, this))->DetachThread();
 }
 
 void ElESceneManager::Draw()
 {
 	using namespace std;
 	using namespace chrono;
-	while (1) {
+	//while (1) {
 		if (scene && !sceneIsChanging)
 			scene->Draw();
-	}
+	//}
 }
 
 
@@ -44,5 +44,6 @@ void ElESceneManager::SceneMainLoop()
 	using namespace chrono;
 	if(scene)
 		scene->Update();
+    Draw();
 	//this_thread::sleep_for(16ms);
 }

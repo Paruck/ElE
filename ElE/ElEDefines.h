@@ -22,10 +22,10 @@ typedef enum ElEBoolean
 #ifdef RASPBERRY_COMPILE
 #include <inttypes.h>
 #include <cstdint>
-typedef int32_t				ElEint;
+typedef int32_t			ElEint;
 typedef uint32_t			ElEuint;
 typedef int8_t				ElEbyte;
-typedef uint8_t				ElEubyte;
+typedef uint8_t			ElEubyte;
 typedef uint32_t			ElEsize_t;
 
 #else
@@ -42,9 +42,9 @@ typedef char				ElEchar;
 typedef unsigned char		ElEuchar;
 typedef void				ElEvoid;
 typedef short				ElEshort;
-typedef unsigned short		ElEushort;
+typedef unsigned short	ElEushort;
 typedef double				ElEdouble;
-typedef ElEbool				FLAG;
+typedef ElEbool			FLAG;
 typedef float				ElEfloat;
 
 const ElEint	threadAmmount = 4;

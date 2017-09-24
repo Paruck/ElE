@@ -5,7 +5,7 @@ ElEMaterial::ElEMaterial() : vertexShader(nullptr),
 						fragmentShader(nullptr),
 						programid(-1), textureid(-1)
 {
-    //ctor
+    shaderAttribFunction = nullptr;    //ctor
 }
 
 ElEMaterial::~ElEMaterial()
@@ -55,10 +55,10 @@ ElEvoid ElEMaterial::changeFragmentShader(const _IN_ ElEchar * filename)
  */
 }
 
-ElEvoid ElEMaterial::setup()
+ElEvoid ElEMaterial::setup(const ElEuint& slot)
 {
 #ifdef RASPBERRY_COMPILE
-
+    GLint linked;
     if(!vertexShader)
         initVertexShader("vShader.glsl");
     if(!fragmentShader)
@@ -66,7 +66,28 @@ ElEvoid ElEMaterial::setup()
     programid = glCreateProgram();
     glAttachShader(programid, vertexShader->getID());
     glAttachShader(programid, fragmentShader->getID());
+    if(!shaderAttribFunction)
+    {
+        shaderAttribFunction(programid, slot);
+    }
     glLinkProgram(programid);
+    glGetProgramiv(programid, GL_LINK_STATUS, &linked);
+    if(!linked)
+    {
+            GLint infoLen = 0;
+            glGetProgramiv(programid, GL_INFO_LOG_LENGTH, &infoLen);
+
+            if(infoLen > 1)
+            {
+                    char* infoLog = (char*)malloc(sizeof(char) * infoLen);
+                    glGetProgramInfoLog(programid, infoLen, NULL, infoLog);
+                    printf("Error linking program:\n%s\n", infoLog);
+                    free(infoLog);
+            }
+            glDeleteProgram(programid);
+            return;
+    }
+    else printf("The program %d compiled succesfully\n");
 #endif
 /** TODO (komo97#1#): Añadir funcionalidad de texturas */
 

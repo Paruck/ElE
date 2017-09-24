@@ -46,32 +46,38 @@ ElEvoid ElEMesh::draw()
 {
 #ifdef RASPBERRY_COMPILE
     glUseProgram(material.getProgramID());
-    /*if(modifiedVertex)
+    if(modifiedVertex)
     {
-        glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
-            &vertex.front(), GL_DYNAMIC_DRAW);
+        //glBufferData(meshName, sizeof(ElEfloat)*vertex.size(),
+            //&vertex.front(), GL_DYNAMIC_DRAW);
+        glVertexAttribPointer(meshName,4,
+            GL_FLOAT,GL_FALSE, 0, &vertex.front());
         modifiedVertex = ElEfalse;
     }
     if(modifiedIndexes)
     {
-        glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
-            &indexes.front(), GL_STATIC_DRAW);
+        //glBufferData(indexName, sizeof(ElEubyte)*indexes.size(),
+            //&indexes.front(), GL_STATIC_DRAW);
         modifiedIndexes = ElEfalse;
-    } */
-    glBindBuffer(GL_ARRAY_BUFFER, meshName);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(ElEfloat)*vertex.size(),
-        &vertex.front(), GL_DYNAMIC_DRAW);
+    }
+    //glBindBuffer(GL_ARRAY_BUFFER, meshName);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(ElEfloat)*vertex.size(),
+        //&vertex.front(), GL_DYNAMIC_DRAW);
+    //glVertexAttribPointer(0,vertex.size(),GL_FLOAT,GL_FALSE,0,&vertex.front());
+    glEnableVertexAttribArray(meshName);
+
     if(indexes.size() > 0)
     {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ElEubyte)*indexes.size(),
-            &indexes.front(), GL_STATIC_DRAW);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
+        //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ElEubyte)*indexes.size(),
+           // &indexes.front(), GL_STATIC_DRAW);
         glDrawElements(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
-            vertex.size(),GL_UNSIGNED_BYTE, NULL);
+            vertex.size()/4,GL_UNSIGNED_BYTE, indexes.data());
     }
     else
         glDrawArrays(isTriangleStrip ? GL_TRIANGLE_STRIP : GL_TRIANGLES,
-            0,vertex.size());
+            0,vertex.size()/4);
+    glDisableVertexAttribArray(meshName);
 #endif
 }
 
@@ -97,8 +103,9 @@ ElEvoid ElEMesh::changeFragmentShader(const _IN_ ElEchar * filename)
 
 ElEvoid ElEMesh::setup()
 {
-    material.setup();
-    glGenBuffers(1,&meshName);
+    meshName = ElE::getIDManager().getUnusedID();
+    material.setup(meshName);
+    /*glGenBuffers(1,&meshName);
     glBindBuffer(GL_ARRAY_BUFFER, meshName);
     glBufferData(GL_ARRAY_BUFFER, sizeof(ElEfloat)*vertex.size(),
         &vertex.front(), GL_DYNAMIC_DRAW);
@@ -108,6 +115,8 @@ ElEvoid ElEMesh::setup()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexName);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ElEubyte)*indexes.size(),
             &indexes.front(), GL_STATIC_DRAW);
-    }
+    }*/
+    glVertexAttribPointer(meshName,4,
+        GL_FLOAT,GL_FALSE, 0, &vertex.front());
     modifiedIndexes = modifiedVertex = ElEfalse;
 }

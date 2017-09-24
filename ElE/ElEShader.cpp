@@ -16,6 +16,7 @@ void ElEShader::LoadFragmentShader(const ElEchar * filename)
 {
 	shaderType = fragmentShader;
 #ifdef RASPBERRY_COMPILE
+	GLint compiled;
 
 	FILE* f = fopen(filename, "rb");
 	assert(f);
@@ -29,6 +30,23 @@ void ElEShader::LoadFragmentShader(const ElEchar * filename)
 	id = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(id, 1, (const GLchar**)&src, 0);
 	glCompileShader(id);
+    glGetShaderiv(id, GL_COMPILE_STATUS, &compiled);
+    if(!compiled)
+    {
+            GLint infoLen = 0;
+            glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLen);
+            if(infoLen > 1)
+            {
+                    char* infoLog = (char*)malloc(sizeof(char) * infoLen);
+                    glGetShaderInfoLog(id, infoLen, NULL, infoLog);
+                    printf("Error compiling shader:\n%s\n", infoLog);
+                    free(infoLog);
+            }
+            glDeleteShader(id);
+            return;
+    }
+    else printf("Shader compiled normally\n");
+
 #endif
 }
 
@@ -36,6 +54,8 @@ void ElEShader::LoadVertexShader(const ElEchar * filename)
 {
 	shaderType = vertexShader;
 #ifdef RASPBERRY_COMPILE
+	GLint compiled;
+
 	FILE* f = fopen(filename, "rb");
 	assert(f);
 	fseek(f, 0, SEEK_END);
@@ -48,6 +68,23 @@ void ElEShader::LoadVertexShader(const ElEchar * filename)
 	id = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(id, 1, (const GLchar**)&src, 0);
 	glCompileShader(id);
+    glGetShaderiv(id, GL_COMPILE_STATUS, &compiled);
+    if(!compiled)
+    {
+            GLint infoLen = 0;
+            glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLen);
+            if(infoLen > 1)
+            {
+                    char* infoLog = (char*)malloc(sizeof(char) * infoLen);
+                    glGetShaderInfoLog(id, infoLen, NULL, infoLog);
+                    printf("Error compiling shader:\n%s\n", infoLog);
+                    free(infoLog);
+            }
+            glDeleteShader(id);
+            return;
+    }
+    else printf("Shader compiled normally\n");
+
 #endif
 }
 

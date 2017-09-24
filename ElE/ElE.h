@@ -40,6 +40,34 @@
 #include <vector>
 
 #define RASPBERRY_COMPILE
+
+#ifdef RASPBERRY_COMPILE
+typedef struct EGLStuff{
+        EGLint                          success = 0;
+        EGLint                          num_config;
+        EGL_DISPMANX_WINDOW_T           nativeWindow;
+        DISPMANX_ELEMENT_HANDLE_T       dispman_element;
+        DISPMANX_DISPLAY_HANDLE_T       dispman_display;
+        DISPMANX_UPDATE_HANDLE_T        dispman_update;
+        VC_RECT_T                       dst_rect;
+        VC_RECT_T                       src_rect;
+}EGLStuff;
+
+class GLMeshIDManager
+{
+public:
+    GLMeshIDManager();
+    ElEuint getUnusedID();
+    ElEvoid cleanUsedID(ElEuint idTag);
+private:
+    struct Sdata{
+    ElEuint     id;
+    ElEbool     inUse = ElEfalse;
+    }*data;
+};
+#endif // RASPBERRY_COMPILE
+
+
 class ElEGLContext {
 public:
 	union Context {
@@ -156,7 +184,9 @@ private:
 	static ElEThreadPool*							threadPool;
 #ifndef RASPBERRY_COMPILE
 	static SDL_Event								event;
-
+#else
+    static EGLStuff                                stuff;
+    static GLMeshIDManager                         mngr;
 #endif
 public:
 	static void ElEcall App(const _IN_ ElEGraphicsComponents&			graph,
@@ -177,7 +207,7 @@ public:
  	static inline ElEGraphicsComponents ElEcall getGraphicsRenderer() { return graphicsComp; }
 #ifdef RASPBERRY_COMPILE
 	static void ElEcall PutPixel();
-
+    static inline GLMeshIDManager& ElEcall getIDManager() { return mngr; }
 #endif
 private:
 	static void ElEcall PrepareJumpTables();
